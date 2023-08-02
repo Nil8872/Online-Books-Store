@@ -1,0 +1,29 @@
+td, th{
+    border-bottom: 1px solid #d5d5d5;
+    text-align: start;
+}
+
+td{
+    padding:  25px 0px;
+}
+
+th{
+    padding-bottom: 20px;
+}
+
+table{ 
+    border-collapse: collapse;
+    font-size: 14px;
+    color:#212121;
+    width: 100%;
+}
+.btn{
+    height: 30px;
+    width: 80px; 
+    font-size: 16px;
+    cursor: pointer; 
+    text-align: center; 
+    border-radius: 5px;
+    padding:0;
+    margin: 0;
+}
