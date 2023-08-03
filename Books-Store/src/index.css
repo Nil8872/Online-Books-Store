@@ -17,8 +17,7 @@ body{
 
 .btn {
   height: 40px;
-  width: 150px;
-  max-width: 129px;
+  width: 150px; 
   font-size: 16px;
   cursor: pointer;
   border: none;
@@ -79,4 +78,39 @@ body{
   justify-content: center;
   align-items: center;
 }
+
+.grid-item {
+  background-color: #f7f7f7;
+  border: 1px solid #b9b2b2cc;
+  text-align: center;
+  margin: 15px;
+  height: 513px;
+  border-radius: 7px;
+  box-sizing: border-box;
+  
+}
+.grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(277.67px, 277.67px));
  
+  justify-content: center;
+  align-items: center;
+}
+
+.mg-15{
+  margin:15px;
+}
+
+.active{
+  background-color: var(--red);
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  text-align: center;
+  color: white;
+
+}
+
+.font-Bold {
+  font-weight: 700;
+}

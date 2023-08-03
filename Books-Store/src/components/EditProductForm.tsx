@@ -27,7 +27,7 @@ const EditProductForm: React.FC = () => {
   return (
     <>
       <div className="container">
-        <div className="row" style={{ marginBottom: "40px" }}>
+        <div className="row" style={{ marginBottom: "35px" }}>
           <div className={styles.rowHalf}>
             <div className={styles.inputName}>First Name*</div>
             <input

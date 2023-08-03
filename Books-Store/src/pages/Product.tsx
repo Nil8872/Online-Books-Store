@@ -60,7 +60,7 @@ const Product: React.FC = () => {
         <div style={{fontSize:"20px", cursor:"pointer"}}> <MdNavigateNext/></div>
          
         </div>
-          </div>
+        </div>
       </div>
       
       <Footer />
