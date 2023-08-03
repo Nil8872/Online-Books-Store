@@ -101,6 +101,10 @@ body{
   margin:15px;
 }
 
+.mg-10{
+  margin: 0px 10px ;
+}
+
 .active{
   background-color: var(--red);
   border-radius: 50%;
@@ -113,4 +117,8 @@ body{
 
 .font-Bold {
   font-weight: 700;
+}
+
+.w-100{
+  width: 100%;
 }

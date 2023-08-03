@@ -25,7 +25,7 @@ const ProductList : React.FC = () => {
       </div>
       <ProductItem/>
       <div style={{display:"flex", justifyContent:"center", marginTop:"40px", alignItems:"center", textAlign:"center", color:"#414141"}}>
-      <div className='font-bold' style={{fontWeight:"700", fontSize: "20px", cursor:"pointer", marginTop:"5px"}}><MdNavigateBefore/></div>
+      <div className='font-Bold' style={{fontWeight:"700", fontSize: "20px", cursor:"pointer", marginTop:"5px"}}><MdNavigateBefore/></div>
       <div className='mg-15 center active'>1</div>
       <div className='mg-15 center '>2</div>
       <div className='mg-15 center '>3</div>

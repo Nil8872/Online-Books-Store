@@ -1,7 +1,7 @@
 import style from "../styles/header.module.css";
 import "../index.css";
 import tatvaLogo from "../assets/tatvaLogo.png";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import Button from '@mui/material/Button'; 
 import { MdShoppingCart } from "react-icons/md";
 import {useState} from 'react'
@@ -10,7 +10,12 @@ import {useState} from 'react'
 function Header() {
 
   const [cartCount, setCartCount] = useState(0);
- 
+ const navigate = useNavigate();
+  const hadleCartClick = () => {
+    console.log("Clicked to cart");  
+    navigate("/cartpage");
+    //  return <Navigate to="/" replace={true} />;
+  }
   
   return (
     <>
@@ -32,10 +37,8 @@ function Header() {
             <div className={style.headerRightItem}>
               <Link className={style.headerRightItemLink} to="/register">Register</Link>
             </div>
-            {/* <button className={`${style.headerRightItem} ${style.headerRightItemCart}`}>
-               Cart
-            </button> */}
-             <Button color="secondary" onClick={()=>setCartCount((c)=>c+1)} variant="outlined" startIcon={<MdShoppingCart color="var(--red)"/>}>
+            
+             <Button color="secondary" onClick={hadleCartClick} variant="outlined" startIcon={<MdShoppingCart color="var(--red)"/>}>
               <span style={{marginRight: "3px", color:"var(--red)"}}> {cartCount} </span>
         Cart
       </Button>
