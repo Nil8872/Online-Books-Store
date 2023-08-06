@@ -17,9 +17,7 @@ const dataFromBackednd: Array<T> = [
   "../assets/product8.jpg",
 ];
 
-dataFromBackednd.map((item) => {
-  console.log(item);
-});
+ 
 
 const ProductItem: React.FC = () => {
   return (

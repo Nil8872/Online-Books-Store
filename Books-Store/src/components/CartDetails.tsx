@@ -3,7 +3,8 @@ import "../index.css";
 import styles from "../styles/cart.module.css";
 import Cart from "./Cart";
 
-type T = string;
+// type T = string | number;
+type T = string ;
 
 const dataFromBackednd: Array<T> = [
   "../assets/product1.jpg",
@@ -27,7 +28,7 @@ const CartDetails: React.FC = () => {
           <div className="row-column center">
             <div className={styles.cardTopHeading}>
               <div>
-                My Shoping Bag <span>(</span> <span>item 3</span> <span>)</span>
+                My Shoping Bag <span>(</span> <span>item {dataFromBackednd.length}</span> <span>)</span>
               </div>
               <div>
                 Total Price : <span>3000</span>

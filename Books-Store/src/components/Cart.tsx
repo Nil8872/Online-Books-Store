@@ -1,15 +1,18 @@
-import React from 'react';
+import React,{useState} from 'react';
 import "../index.css";
 import styles from "../styles/cart.module.css";
 
 
-// type CardDetails = string;
-
-
+ 
 
 const Cart :  React.FC <{cartDetails:string}>= ({cartDetails}) =>{
+ 
+  const [itemCount, setItemCount] = useState(0);
+  
 
-// console.log(cardDetails);
+  const handleRemoveItem = () => {
+    console.log("Item is removed from cart");
+  }
   return (
     <>
       <div className={styles.card}>
@@ -55,6 +58,8 @@ const Cart :  React.FC <{cartDetails:string}>= ({cartDetails}) =>{
                 >
                   <div>
                     <button
+                    onClick={()=> setItemCount(c=>c-1)}
+                    disabled={itemCount === 0}
                       className="btn"
                       style={{
                         height: "20px",
@@ -73,9 +78,10 @@ const Cart :  React.FC <{cartDetails:string}>= ({cartDetails}) =>{
                         margin: "0px 10px",
                       }}
                     >
-                      1
+                      {itemCount}
                     </button>
                     <button
+                      onClick={()=>setItemCount(c=>c+1)}
                       className="btn"
                       style={{
                         height: "20px",
@@ -86,7 +92,7 @@ const Cart :  React.FC <{cartDetails:string}>= ({cartDetails}) =>{
                       +
                     </button>
                   </div>
-                  <div style={{ color: "var(--red)" }}>Remove</div>
+                  <div style={{ color: "var(--red)", cursor:"pointer" }} onClick={handleRemoveItem}>Remove</div>
                 </div>
               </div>
             </div>
