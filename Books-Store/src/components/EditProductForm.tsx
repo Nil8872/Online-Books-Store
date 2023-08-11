@@ -1,138 +1,211 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../styles/loginOrReg.module.css";
 import headerStyle from "../styles/header.module.css";
-// import '../index.css'
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
-type InputeData = {
-  firstName: string;
-  lastName: string;
-  shopeCategory: string;
-  discription: string;
+type BookData = {
+  bookName: string;
+  price: number;
+  category: string;
+  discription: string; 
 };
 
 const EditProductForm: React.FC = () => {
-  const [inputData, setInputData] = useState<InputeData>({
-    firstName: "",
-    lastName: "",
-    shopeCategory: "",
-    discription: "",
+  const [file, setFile] = useState<File | null>(null);
+  const [filename, setFileName] = useState<string>("No choosen file");
+  const [fileError, setFileError] = useState<string | null>(null);
+
+
+  const initialValues: BookData = {
+    bookName: "",
+    price: 100,
+    category: "category 1",
+    discription: "",  
+     
+  };
+
+  const validationSchema = Yup.object({
+    bookName: Yup.string().required("Please enter a book name!"),
+    price: Yup.number().required("Please enter a price"),
+     
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputData({ ...inputData, [e.target.name]: e.target.value });
-  };
+  const { values, handleBlur, handleChange, handleSubmit, touched, errors } = useFormik({
+    initialValues,
+    onSubmit: async (values: BookData) => {
+
+    if (!file) {
+        setFileError("Please select a file");
+        return;  // This will stop the function execution here, preventing submission
+    }
+    setFileError(null);
+      const formData = new FormData();
+
+      for (const key in values) {
+        formData.append(key, values[key]);
+      }
+      formData.append("image", file )
+      console.log(  file);
+      
+
+      const options = {
+        method: "POST",
+        body: formData,
+      };
+
+      try {
+        const result = await fetch("http://localhost:5000/api/book", options);
+        console.log(await result.json());
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    validationSchema,
+  });
+ 
 
   function updateLabel() {}
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
+    if (e.target.files && e.target.files.length > 0) {
+      setFileName(e.target.files[0].name);
+      setFile(e.target.files[0]);
+  }
+  }
+
+  
   return (
     <>
       <div className="container">
-        <div className="row" style={{ marginBottom: "35px" }}>
-          <div className={styles.rowHalf}>
-            <div className={styles.inputName}>First Name*</div>
-            <input
-              className="input"
-              type="text"
-              name="firstName"
-              value={inputData.firstName}
-              onChange={handleChange}
-            />
+        <form action=""  onSubmit={handleSubmit}  method="post">
+          <div className="row" style={{ marginBottom: "35px" }}>
+            <div className={styles.rowHalf}>
+              <div className={styles.inputName}>Book name*</div>
+              <input
+                className="input"
+                type="text"
+                name="bookName"
+                value={values.bookName}
+                onChange={handleChange}
+              />
+              {errors.bookName && touched.bookName ? (
+                <div className="error">{errors.bookName}</div>
+              ) : null}
+            </div>
+            <div className={styles.rowHalf}>
+              <div className={styles.inputName}>Price</div>
+              <input
+                className="input"
+                type="number"
+                name="price"
+                value={values.price}
+                onChange={handleChange}
+              />
+              {errors.price && touched.price ? (
+                <div className="error">{errors.price}</div>
+              ) : null}
+            </div>
           </div>
-          <div className={styles.rowHalf}>
-            <div className={styles.inputName}>Last Name*</div>
-            <input
-              className="input"
-              type="text"
-              name="lastName"
-              value={inputData.lastName}
-              onChange={handleChange}
-            />
+          <div className="row" style={{ marginBottom: "60px" }}>
+            <div className={styles.rowHalf}>
+              <div className={styles.inputName}>Shop by Categories</div>
+              <select
+                value={values.category}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                name="category"
+                id=""
+                style={{ width: "100%", height: "40px" }}
+              >
+                <option value="category 1"> Category 1 </option>
+                <option value="category 2"> Category 2 </option>
+                <option value="category 3"> Category 3 </option>
+                <option value="category 4"> Category 4 </option>
+                <option value="category 5"> Category 5 </option>
+              </select>
+            </div>
+            <div className={styles.rowHalf}>
+              <div className={styles.inputName}>Discription</div>
+              <input
+                className="input"
+                type="text"
+                name="discription"
+                value={values.discription}
+                onChange={handleChange}
+              />
+            </div>
           </div>
-        </div>
-        <div className="row" style={{ marginBottom: "60px" }}>
-          <div className={styles.rowHalf}>
-            <div className={styles.inputName}>Shop by Categories</div>
-            <select name="" id="" style={{ width: "100%", height: "40px" }}>
-              <option>Category 1</option>
-              <option>Category 2</option>
-              <option>Category 3</option>
-              <option>Category 4</option>
-              <option>Category 5</option>
-            </select>
-          </div>
-          <div className={styles.rowHalf}>
-            <div className={styles.inputName}>Discription</div>
-            <input
-              className="input"
-              type="text"
-              name="lastName"
-              value={inputData.lastName}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
 
-        <div className="row" style={{ marginBottom: "35px" }}>
-          <div className={styles.rowHalf} style={{ display: "flex" }}>
-            <label
-              htmlFor="upload"
-              id="upload-label"
-              className="custom-file-upload center"
-            >
-              Upload
-            </label>
-            <input
-              type="file"
-              id="upload"
-              style={{ display: "none" }}
-              onChange={updateLabel}
-            />
-            <p
-              id="file-name"
-              className="center"
-              style={{
-                justifyContent: "start",
-                border: "1px solid #767676",
-                width: "100%",
-                height: "40px",
-                boxSizing: "border-box",
-                borderLeft: "0px",
-              }}
-            >
-              No file chosen
-            </p>
+          <div className="row">
+            <div className={styles.rowHalf} style={{ display: "flex" }}>
+              <label
+                htmlFor="upload"
+                id="upload-label"
+                className="custom-file-upload center"
+              >
+                Upload
+              </label>
+              <input
+                type="file"
+                id="upload"
+                name="image"
+                style={{ display: "none" }}
+                // onChange={handleChange}
+                onChange={handleFileChange}
+                onBlur={handleBlur}
+              />
+              <p
+                id="file-name"
+                className="center"
+                style={{
+                  justifyContent: "start",
+                  paddingLeft:"10px",
+                  border: "1px solid #767676",
+                  width: "100%",
+                  height: "40px",
+                  boxSizing: "border-box",
+                  borderLeft: "0px",
+                }}
+              >
+                {filename}
+              </p>
+            </div>
+             
           </div>
-        </div>
+          {fileError && <div className="error">{fileError}</div>}  
 
-        <div style={{ display: "flex" }}>
-          <div>
-            <button
-              className={`btn ${headerStyle.searchBtn}`}
-              style={{
-                background: "green",
-                borderRadius: "5px",
-                width: "100px",
-                height: "40px",
-                marginRight: "5px",
-              }}
-            >
-              Save
-            </button>
+          <div style={{ display: "flex", marginTop :"35px" }}>
+            <div>
+              <button
+                type="submit"
+                className={`btn ${headerStyle.searchBtn}`}
+                style={{
+                  background: "green",
+                  borderRadius: "5px",
+                  width: "100px",
+                  height: "40px",
+                  marginRight: "5px",
+                }}
+              >
+                Save
+              </button>
+            </div>
+            <div className={headerStyle.mainSearchBoxItems}>
+              <button
+                className="btn"
+                style={{
+                  backgroundColor: "var(--red)",
+                  borderRadius: "5px",
+                  width: "100px",
+                  height: "40px",
+                }}
+              >
+                Cancle
+              </button>
+            </div>
           </div>
-          <div className={headerStyle.mainSearchBoxItems}>
-            <button
-              className="btn"
-              style={{
-                backgroundColor: "var(--red)",
-                borderRadius: "5px",
-                width: "100px",
-                height: "40px",
-              }}
-            >
-              Cancle
-            </button>
-          </div>
-        </div>
+        </form>
       </div>
     </>
   );

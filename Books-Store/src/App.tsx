@@ -14,6 +14,7 @@ import UpdateProfile from "./pages/UpdateProfile";
 import { ToastContainer } from "react-toastify";
 import Category from "./pages/Category";
 import User from "./context/User";
+import Book from "./pages/Book";
 
 function App() {
   return (
@@ -33,7 +34,7 @@ function App() {
           <Route path="/productlisting" element={<ProductListing />} />
           <Route path="/cartpage" element={<CartPage />} />
           <Route path="/category" element={<Category />} />
-
+          <Route path="/book" element={<Book/>} />
           <Route path="/update-profile" element={<UpdateProfile/>} /> 
         </Routes>
         <Footer/>

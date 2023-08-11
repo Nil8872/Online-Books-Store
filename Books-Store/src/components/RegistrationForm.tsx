@@ -1,13 +1,12 @@
-import "../index.css";
-import { useContext } from "react";
+import "../index.css"; 
 import styles from "../styles/loginOrReg.module.css";
 import btnStyles from "../styles/header.module.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";   
 import 'react-toastify/dist/ReactToastify.css';
- import {Role} from "../utils/enum.js";
-import { UserContext } from "../context/User.js";
+ import {Role} from "../utils/enum.js"; 
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/Auth.js";
 
 
 type RegisterData = {
@@ -40,22 +39,25 @@ const RegistrationForm: React.FC <{mode: string}> = ({mode}) => {
 
   }else{
     navigate("/login");
-  }
-  const {register} = useContext(UserContext);
+  } 
+  const {register} = useAuth();
+
+  
   const endPoint : string = mode === "register" ? "createuser" : "updateuser";
   const navigateString : string = mode === "register" ? "/login" : "/";
   const Method : string = mode === "register" ? "POST" : "PUT";
   
+  console.log(user);
 
   
-  const initialValues: RegisterData = {
-    firstName: "",
-    lastName: "",
-    email: "",
+  const initialValues: RegisterData =  {
+    firstName: mode === "register" ? "": user?.firstName,
+    lastName: mode === "register" ? "": user?.lastName,
+    email:  mode === "register" ? "": user?.email,
     password: "",
     cpassword: "",
-    roleId : Role.Seller,
-  };
+    roleId : mode === "register"?  Role.Seller : user?.roleId ,
+  } 
 
   const { values,
     handleSubmit, 
@@ -66,7 +68,7 @@ const RegistrationForm: React.FC <{mode: string}> = ({mode}) => {
   } = useFormik({
     initialValues,
     onSubmit: async(values: RegisterData) => {
-      console.log(values);
+       
       
          values = {...values, roleId: parseInt(values.roleId)}
          

@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useState, useContext } from "react";
 import { toast, ToastOptions } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
@@ -157,8 +157,4 @@ const User: React.FC = ({ children }) => {
 
 export default User;
 
-// export const useAuth = () =>{
-//     const {users} = useContext(UserContext);
 
-//     return users
-// }
