@@ -1,73 +1,60 @@
 import "../index.css";
+import { useContext } from "react";
 import styles from "../styles/loginOrReg.module.css";
+import btnStyles from "../styles/header.module.css";
 import { useFormik } from "formik";
-import * as Yup from "yup";  
-import {toast, ToastContainer, ToastOptions} from "react-toastify"
+import * as Yup from "yup";   
 import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate } from 'react-router-dom';
+ import {Role} from "../utils/enum.js";
+import { UserContext } from "../context/User.js";
+import { useNavigate } from "react-router-dom";
 
 
-
+type RegisterData = {
+      firstName: string;
+      lastName: string;
+      email: string;
+      password: string;
+      cpassword: string;
+      roleId : number;
+    };
  
-const toastStyles : ToastOptions<{  position : string,
-  autoClose : number,
-  closeOnClick : boolean,
-  pauseOnHover: boolean,
-  draggable: boolean,
-  theme : string}> = 
-  {
-    position: "top-right",
-    autoClose: 5000,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    theme: "colored",
-    }
-
-
-type InputData = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  cpassword: string;
-};
-
-type ErrorObject = {
-  type: string,
-  value: string,
-  msg: string,
-  path: string,
-  location: string
-};
-
-type SuccessObject = {
-  success: boolean,
-  message: string
-};
-type Data = { errors: ErrorObject[] } | SuccessObject;
-
 const validationSchema =  Yup.object({
   firstName: Yup.string().required("Please enter first name"),
   lastName: Yup.string().required("Please enter last name"),
   email: Yup.string().email().required("Please enter your email address"),
   password: Yup.string().min(8,"password should be minimum 8 number | character").required("Please enter your password"),
   cpassword: Yup.string().min(8, "password should be minimum 8 character").required("Please enter your confirm password")
-  .oneOf([Yup.ref("password")], "password must match")
+  .oneOf([Yup.ref("password")], "password must match"),
+  roleId : Yup.number().required("Please select role")
 
 })
 
-const RegistrationForm: React.FC  = ( ) => {
-  console.log(import.meta.env._VITE_BASE_URL)
+const RegistrationForm: React.FC <{mode: string}> = ({mode}) => {
+   
   const navigate = useNavigate();
 
+  let user = localStorage.getItem("user");
+  if(user){
+    user = JSON.parse(user);
+
+  }else{
+    navigate("/login");
+  }
+  const {register} = useContext(UserContext);
+  const endPoint : string = mode === "register" ? "createuser" : "updateuser";
+  const navigateString : string = mode === "register" ? "/login" : "/";
+  const Method : string = mode === "register" ? "POST" : "PUT";
   
-  const initialValues: InputData = {
+
+  
+  const initialValues: RegisterData = {
     firstName: "",
     lastName: "",
     email: "",
     password: "",
     cpassword: "",
+    roleId : Role.Seller,
   };
 
   const { values,
@@ -78,31 +65,13 @@ const RegistrationForm: React.FC  = ( ) => {
     errors 
   } = useFormik({
     initialValues,
-    onSubmit: async(values: InputData) => {
-
-      const options = {
-        method : "POST",
-        headers:{
-          "content-type" : "application/json",
-
-        },
-        body: JSON.stringify(values),
-      }
-
-
-      const result  = await fetch(`${import.meta.env.VITE_BASE_URL}/auth/createuser`, options);
-       const data : Data = await result.json();
-       console.log(data);
-      if( data.success === true){
-        toast.success(data.message, toastStyles );
-          navigate("/login") 
-        
-      }
-      else{
-        data.errors.forEach((err: ErrorObject) => {
-          toast.error(err.msg, toastStyles);
-        });
-      }
+    onSubmit: async(values: RegisterData) => {
+      console.log(values);
+      
+         values = {...values, roleId: parseInt(values.roleId)}
+         
+        register(values,endPoint, Method,navigateString);
+     
       
     },
      validationSchema,
@@ -113,14 +82,19 @@ const RegistrationForm: React.FC  = ( ) => {
     <div className="container"> 
       <div className={styles.mainForm}>
         <p className={styles.title}>Personal Information</p>
-        <p className={styles.info}>
+        {
+          mode === "register" ?  <p className={styles.info}>
           Please enter the following information to create your account
-        </p>
+        </p>: <div style={{marginBottom: "10px"}}>
+
+        </div>
+        }
+
       </div>
 
-      <div className={styles.inputeFields}>
+      <div className={styles.inputeFields} >
         <form action="" method="post" onSubmit={handleSubmit}>
-          <div className="row" style={{ marginBottom: "40px" }}>
+          <div className="row" style={{ marginBottom: "40px"}}>
             <div className={styles.rowHalf}>
               <div className={styles.inputName}>First Name*</div>
               <div style={{display:"flex", flexDirection:"column"}}>
@@ -150,18 +124,36 @@ const RegistrationForm: React.FC  = ( ) => {
             </div>
           </div>
 
-          <div style={{ marginBottom: "70px" }}>
-            <div className={styles.inputName}>Email *</div>
-            <input
-              className="input"
-              type="email"
-              name="email"
-              value={values.email}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
+
+          <div className="row" style={{ marginBottom: "40px"}}>
+            <div className={styles.rowHalf}>
+              <div className={styles.inputName}>Email*</div>
+              <div style={{display:"flex", flexDirection:"column"}}>
+
+              </div>
+              <input
+                className="input"
+                type="email"
+                name="email"
+                value={mode==="update"?  values.email = user?.email:  values.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                disabled={mode === "update"}
+              />
             {errors.email && touched.email ? <div className="error">{errors.email}</div> : null }
+            </div>
+            <div className={styles.rowHalf}>
+              <div className={styles.inputName}>Last Name*</div>
+              <select name="roleId" className="input" value={values.roleId} onChange={handleChange}>
+                <option   style={{fontSize:"16px"}} value={Role.Seller}>Seller</option>
+                <option style={{fontSize: "16px"}} value={Role.Buyer}>Buyer</option>
+              </select>
+               
+              {errors.roleId && touched.roleId ? <div className="error">{errors.roleId}</div> : null }
+            </div>
           </div>
+
+       
 
           <p style={{ marginBottom: "10px" }} className={styles.title}>
             Login Information
@@ -197,7 +189,7 @@ const RegistrationForm: React.FC  = ( ) => {
               {errors.cpassword && touched.cpassword ? <div className="error">{errors.cpassword}</div> : null }
             </div>
           </div>
-
+        {mode === "register" &&
           <button
             className="btn"
             style={{
@@ -210,9 +202,22 @@ const RegistrationForm: React.FC  = ( ) => {
           >
             Register
           </button>
-     
-        </form>
-        <ToastContainer/>
+        }
+        {
+          mode === "update" && 
+          <div style={{display:'flex'}}>
+          <div >
+          <button  type="submit" className={`btn ${btnStyles.searchBtn}`} style={{background:"green", borderRadius:'5px', width:"136px", height:"40px", marginRight:"10px"}} > Save </button>
+
+        </div>
+        <div>
+
+          <button className="btn" style={{backgroundColor:'var(--red)', borderRadius:"5px", width:"136px", height:"40px"}} >Cancle</button>
+        </div>
+          </div>
+          
+        }
+        </form> 
       </div>
     </div>
   );

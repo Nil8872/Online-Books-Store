@@ -6,6 +6,8 @@ import * as Yup from "yup";
 import {toast, ToastContainer,ToastOptions} from "react-toastify"
 // import axios from "axios";
 
+import {useContext} from "react";
+import { UserContext } from "../context/User";
 
 
 type InputData = {
@@ -13,20 +15,7 @@ type InputData = {
   password: string;
 };
 
-const toastStyles : ToastOptions<{  position : string,
-  autoClose : number,
-  closeOnClick : boolean,
-  pauseOnHover: boolean,
-  draggable: boolean,
-  theme : string}> = 
-  {
-    position: "top-right",
-    autoClose: 5000,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    theme: "colored",
-    }
+
 
 const initialValues: InputData = {
   email: "",
@@ -40,41 +29,14 @@ const validationSchema = Yup.object({
 
 const LoginForm: React.FC = () => {
 
+  const {setUser} = useContext(UserContext);
+
   const navigate = useNavigate();
   const { handleChange, handleSubmit, handleBlur, values, touched, errors } = useFormik({
     initialValues,
     onSubmit: async() => {
-       try {
-
-        console.log(values);
-
-        const options = {
-          method : "POST",
-          headers : {
-            "content-type": "application/json",
-          },
-          body : JSON.stringify(
-            values
-          )
-        }
-        const result =  (await fetch(`${import.meta.env.VITE_BASE_URL}/auth/login`, options))
-        const data = await result.json();
-
-       if(data.success === true){
-        navigate("/productlisting");
-        toast.success(data.message, toastStyles);
-       }else{
-        if(data.errors){
-
-          data.errors.forEach((error)=>{
-            toast.error(error.msg,toastStyles)
-          })
-        }
-       toast.error(data.message, toastStyles);
-       }
-       } catch (error) {
-        console.log("error: ", error );
-       }
+       
+      setUser(values);
 
     },
     validationSchema
@@ -150,7 +112,7 @@ const LoginForm: React.FC = () => {
             </div>
           </form>
         </div>
-      T</div>
+      </div>
     </div>
   );
 };

@@ -21,7 +21,7 @@ const dataFromBackednd: Array<T> = [
 
 const ProductItem: React.FC = () => {
   return (
-    <div className="conatiner">
+    <div className="container">
       <div className="grid">
         {dataFromBackednd.map((item) => {
           return (

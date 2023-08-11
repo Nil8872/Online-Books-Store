@@ -7,11 +7,23 @@ import Product from "./pages/Product";
 import Edit from "./pages/EditProduct";
 import ProductListing from "./pages/ProductListing";
 import CartPage from "./pages/CartPage";
+import Header from "./components/Header";
+import SearchBar from "./components/SearchBar";
+import Footer from "./components/Footer";
+import UpdateProfile from "./pages/UpdateProfile";
+import { ToastContainer } from "react-toastify";
+import Category from "./pages/Category";
+import User from "./context/User";
 
 function App() {
   return (
     <>
+    
       <Router>
+        <User>
+        <Header/>
+        <ToastContainer/>
+        <SearchBar/>
         <Routes> 
           <Route path="/" element={<Home/>} />
           <Route path="/login" element={<Login />} />
@@ -20,8 +32,15 @@ function App() {
           <Route path="/edit" element={<Edit />} />
           <Route path="/productlisting" element={<ProductListing />} />
           <Route path="/cartpage" element={<CartPage />} />
+          <Route path="/category" element={<Category />} />
+
+          <Route path="/update-profile" element={<UpdateProfile/>} /> 
         </Routes>
+        <Footer/>
+      </User>
       </Router>
+
+       
     </>
   );
 }

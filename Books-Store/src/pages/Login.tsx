@@ -1,18 +1,15 @@
-import Footer from "../components/Footer";
-import Header from "../components/Header";
-import LoginForm from "../components/LoginForm";
-import SearchBar from "../components/SearchBar";
+ 
+import LoginForm from "../components/LoginForm"; 
 import SmallHeader from "../components/SmallHeader";
 import '../index.css' 
 
-function Login() {
+const  Login: React.FC = ()=> {
   return (
     <>
-      <Header />
-      <SearchBar/>
+     
       <SmallHeader mainRoot="Home" subRoot="Login" pageTitle="Login or Create an Account"/>
       <LoginForm/>
-      <Footer/>
+    
     </>
   )
 }

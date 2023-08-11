@@ -1,10 +1,10 @@
  
-import Header from '../components/Header' 
+import ProductListing from './ProductListing'
 
 function Home() {  
   return (
     <> 
-      <Header/>
+       <ProductListing/>
     </>
   )
 }

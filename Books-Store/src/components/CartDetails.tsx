@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import "../index.css";
 import styles from "../styles/cart.module.css";
 import Cart from "./Cart";
+import { UserContext } from "../context/User";
 
 // type T = string | number;
 type T = string ;
@@ -21,6 +22,9 @@ const dataFromBackednd: Array<T> = [
 
 
 const CartDetails: React.FC = () => {
+
+  const {users} = useContext(UserContext);
+  console.log(users);
   return (
      
       <div className="container">

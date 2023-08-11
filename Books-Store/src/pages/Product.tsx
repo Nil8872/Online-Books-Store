@@ -1,8 +1,6 @@
 import React from "react";
-import Header from "../components/Header";
-import SearchBar from "../components/SearchBar";
-import PageTitle from "../components/PageTitle";
-import Footer from "../components/Footer";
+ 
+import PageTitle from "../components/PageTitle"; 
 import "../index.css";
 import ProductDRUD from "../components/ProductDRUD";
 
@@ -12,8 +10,7 @@ import { MdNavigateNext } from "react-icons/md";
 const Product: React.FC = () => {
   return (
     <>
-      <Header />
-      <SearchBar />
+       
       <PageTitle pageTitle="Product Page" />
 
       <div className="container">
@@ -62,8 +59,7 @@ const Product: React.FC = () => {
         </div>
         </div>
       </div>
-      
-      <Footer />
+       
     </>
   );
 };
