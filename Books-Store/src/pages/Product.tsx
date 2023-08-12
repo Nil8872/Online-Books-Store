@@ -2,7 +2,7 @@ import React from "react";
  
 import PageTitle from "../components/PageTitle"; 
 import "../index.css";
-import ProductDRUD from "../components/ProductDRUD";
+import ProductDRUD from "../components/UserCRUD";
 
 import { MdNavigateBefore } from "react-icons/md";
 import { MdNavigateNext } from "react-icons/md";

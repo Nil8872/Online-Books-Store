@@ -1,23 +1,33 @@
-import React from "react";
+import React, {useState} from "react";
 import "../index.css";
 import "../styles/product.css";
 import { useAuth } from "../context/Auth";
+import UserEditableCRUD from "./UserEditableCRUD";
 
 type UserData =
-  | {
+   {
       firstName: string;
       lastName: string;
       email: string;
       roleId: number;
       _id: string;
+      role: string;
     }
-  | "";
+type UserCRUDProps ={
+  allUsers: Array<UserData>;
+}
 
-const ProductDRUD: React.FC<UserData> = ({ allUsers }) => {
+const UserCRUD: React.FC<UserCRUDProps> = ({ allUsers}) => {
 
 const {deleteUser} = useAuth();
 
-  
+const [editableUsers, setEditableUsers] = useState<Array<string>>([]);
+
+const handleEditUser = (id: string) => {
+  setEditableUsers([...editableUsers, id]);
+  // console.log(editableCategory);
+};
+// console.log(editableUsers);
   return (
     <>
       <div className="" style={{ marginTop: "32px", boxSizing: "border-box" }}>
@@ -34,10 +44,13 @@ const {deleteUser} = useAuth();
           </thead>
           <tbody>
             {allUsers &&
-              allUsers.map((user) => {
+              allUsers.map((user) => { 
                 return (
                   <React.Fragment key={user._id}>
-                    <tr>
+                    {
+                      editableUsers.indexOf(user._id) === -1 ?(
+                      <>
+                        <tr>
                       <td>{user.firstName}</td>
                       <td>{user.lastName}</td>
                       <td>{user.email}</td>
@@ -51,6 +64,7 @@ const {deleteUser} = useAuth();
                             color: "green",
                             marginRight: "10px",
                           }}
+                          onClick={()=> handleEditUser(user._id)}
                         >
                           Edit
                         </button>
@@ -72,6 +86,20 @@ const {deleteUser} = useAuth();
                         </button>
                       </td>
                     </tr>
+                      </>
+                      ) 
+                      : 
+                      (
+                      
+                         <UserEditableCRUD
+                          user={user}
+                          setEditableUsers={setEditableUsers} 
+                          editableUsers={editableUsers}
+                          /> 
+                      
+                      )
+                    }
+                    
                   </React.Fragment>
                 );
               })}
@@ -82,4 +110,4 @@ const {deleteUser} = useAuth();
   );
 };
 
-export default ProductDRUD;
+export default UserCRUD;

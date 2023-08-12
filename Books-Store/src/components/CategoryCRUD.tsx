@@ -7,8 +7,7 @@ import {toast} from "react-toastify"
 function CategoryCRUD() {
   const { categories, deleteCategory, addCategory } = useCategory();
 
-  const [categoryName, setCategoryName] = useState("");
-  //   const editableCategory: Array<string> = [];
+  const [categoryName, setCategoryName] = useState(""); 
   const [editableCategory, setEditableCategory] = useState<Array<string>>([]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -115,45 +114,6 @@ function CategoryCRUD() {
                       setEditableCategory={setEditableCategory} 
                       editableCategory={editableCategory}
                       />
-                        {/* <td>
-                          <input
-                          style={{width: "30%"}}
-                            className="input"
-                            type="text"
-                            name="bookName"
-                            value={category.name}
-                            // value={values.bookName}
-                            // onChange={handleChange}
-                          />
-                        </td>
-                        <td>
-                          <button
-                            className="btn"
-                            style={{
-                              backgroundColor: "white",
-                              border: "2px solid green",
-                              color: "green",
-                              marginRight: "10px",
-                            }}
-                            // onClick={() => handleEditCategory(category._id)}
-                          >
-                            Save
-                          </button>
-                        </td>
-                        <td>
-                          <button
-                            className="btn"
-                            style={{
-                              backgroundColor: "white",
-                              border: "2px solid var(--red)",
-                              color: "var(--red)",
-                            }}
-                            //   disabled={user.roleId === 1}
-                            onClick={() => hadleCancle(category._id)}
-                          >
-                            Cancle
-                          </button>
-                        </td> */}
                       </>
                     )}
                   </tr>

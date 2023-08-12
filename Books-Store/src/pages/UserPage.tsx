@@ -1,6 +1,6 @@
 import React from 'react'
 import PageTitle from '../components/PageTitle'
-import ProductDRUD from '../components/ProductDRUD'
+import UserCRUD from '../components/UserCRUD'
 import { useAuth } from '../context/Auth' 
 
 
@@ -19,7 +19,7 @@ const UserPage : React.FC = () => {
             style={{ height: "40px", marginRight: "10px", width: "28%" }}
           />  
         </div>
-      <ProductDRUD allUsers={allUsers}  />
+      <UserCRUD allUsers={allUsers}  />
         </div>
     </>
   )

@@ -16,7 +16,8 @@ const initialValue = {
   setUser: ()=>{},
    _setUser: ()=>{},
     register: ()=>{},
-    deleteUser: ()=>{},
+    deleteUser: (id:string)=>{},
+    updateUserByAdmin: (id:string, updatedData : UpdatedData) => {},
 }
 
 export const UserContext = createContext(initialValue);
@@ -78,6 +79,12 @@ type Data = { errors: ErrorObject[] } | SuccessObject;
 
 type UserProps = {
   children : ReactNode
+}
+
+type UpdatedData = {
+  firstName:string;
+  lastName:string;
+  roleId : number
 }
 
 const User: React.FC <UserProps> = ({ children }) => {
@@ -215,7 +222,7 @@ const User: React.FC <UserProps> = ({ children }) => {
   };
 
   const deleteUser = async(email:string) =>{ 
-    console.log(email);
+     
     const options ={
       method: "DELETE",
       headers : { "Content-Type": "application/json"},
@@ -240,9 +247,34 @@ const User: React.FC <UserProps> = ({ children }) => {
     }
     
   }
+
+ 
+
+
+  const updateUserByAdmin = async (userId : string, updatedData:UpdatedData) =>{
+    const options ={
+      method: "PUT",
+      headers : { "Content-Type": "application/json"},
+      body: JSON.stringify(updatedData)
+    }
+
+    try {
+      const result = await fetch(`${import.meta.env.VITE_BASE_URL}/auth/updatebyadmin/${userId}`, options)
+      const data : Data = await result.json(); 
+      console.log(data);
+      if(data.success === true){
+        toast.success(data.message, toastStyles);
+        getAllUsers();
+      }
+       
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
  
   return (
-    <UserContext.Provider value={{ user, setUser, _setUser, register, allUsers, deleteUser }}>
+    <UserContext.Provider value={{ user, setUser, _setUser, register, allUsers, deleteUser, updateUserByAdmin }}>
       {children}
     </UserContext.Provider>
   );
