@@ -100,7 +100,7 @@ let realUser;
                     shared.hasAccess(item.route, realUser) && (
                       <>
 
-                     { <div className={style.headerRightItem}>
+                     { <div className={style.headerRightItem} key={item.name}>
                       <span style={{ color: "black" }}>|</span>
                     </div>}
                     <div className={style.headerRightItem}>

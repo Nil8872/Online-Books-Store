@@ -35,8 +35,7 @@ const RegistrationForm: React.FC <{mode: string}> = ({mode}) => {
 
   let user = localStorage.getItem("user");
   if(user){
-    user = JSON.parse(user);
-
+    user = JSON.parse(user); 
   }else{
     navigate("/login");
   } 
@@ -51,9 +50,9 @@ const RegistrationForm: React.FC <{mode: string}> = ({mode}) => {
 
   
   const initialValues: RegisterData =  {
-    firstName: mode === "register" ? "": user?.firstName,
-    lastName: mode === "register" ? "": user?.lastName,
-    email:  mode === "register" ? "": user?.email,
+    firstName: mode === "register" ? "": user.firstName,
+    lastName: mode === "register" ? "": user.lastName,
+    email:  mode === "register" ? "": user.email,
     password: "",
     cpassword: "",
     roleId : mode === "register"?  Role.Seller : user?.roleId ,

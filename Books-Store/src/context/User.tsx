@@ -1,14 +1,23 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useEffect, ReactNode } from "react";
 import { toast, ToastOptions } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-const initialValue = {
+const userValue = {
   firstName: "",
   lastName: "",
   roleId: 0,
   _id: 1,
   email: "",
 };
+
+const initialValue = {
+  alluser: [],
+  user: userValue,
+  setUser: ()=>{},
+   _setUser: ()=>{},
+    register: ()=>{},
+    deleteUser: ()=>{},
+}
 
 export const UserContext = createContext(initialValue);
 
@@ -50,19 +59,74 @@ type ErrorObject = {
   location: string;
 };
 
+type UserData = {
+  firstName: string;
+  lastName: string;
+  email:string;
+  roleId: number;
+  _id: string;
+  role: string;
+}
+
 type SuccessObject = {
   success: boolean;
   message: string;
   user: RegisterData;
+  users: Array<UserData>;
 };
 type Data = { errors: ErrorObject[] } | SuccessObject;
 
-const User: React.FC = ({ children }) => {
+type UserProps = {
+  children : ReactNode
+}
+
+const User: React.FC <UserProps> = ({ children }) => {
   const navigate = useNavigate();
 
   const [user, _setUser] = useState(initialValue);
+  const [allUsers, setAllUsers] = useState([]);
 
+  const getAllUsers = async() =>{
+    try {
+  
+      const options = {
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+        } 
+      };
+  
+      const result = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/auth/all`,
+        options
+      );
+  
+      const data: Data = await result.json();
+  
+      if (data.success === true) {
+         setAllUsers(data.users);
+  
+        
+      } else {
+        if (data.errors) {
+          data.errors.forEach((error: ErrorObject) => {
+            toast.error(error.msg, toastStyles);
+          });
+        }
+        toast.error(data.message, toastStyles);
+      }
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+
+  useEffect( ()=>{
+      getAllUsers();  
+  },[])
  
+ 
+
+
 
   const setUser = async (values: LoginData) => {
     try {
@@ -84,6 +148,7 @@ const User: React.FC = ({ children }) => {
 
       if (data.success === true) {
         _setUser(data.user);
+       
 
         const userData = JSON.stringify(data.user);
         localStorage.setItem("user", userData);
@@ -135,6 +200,7 @@ const User: React.FC = ({ children }) => {
           localStorage.setItem("user", userData);
         }
         toast.success(data.message, toastStyles);
+        getAllUsers();
         navigate(navigateString);
 
       } else {
@@ -148,8 +214,35 @@ const User: React.FC = ({ children }) => {
     }
   };
 
+  const deleteUser = async(email:string) =>{ 
+    console.log(email);
+    const options ={
+      method: "DELETE",
+      headers : { "Content-Type": "application/json"},
+      body: JSON.stringify({email})
+    }
+
+    try {
+      const result = await fetch(`${import.meta.env.VITE_BASE_URL}/auth/user`, options)
+      const data : Data = await result.json(); 
+      if(data.success === true){
+        toast.success(data.message, toastStyles);
+        getAllUsers();
+      }
+      else {
+        data.errors.forEach((err: ErrorObject) => {
+          toast.error(err.msg, toastStyles);
+        });
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+    
+  }
+ 
   return (
-    <UserContext.Provider value={{ user, setUser, _setUser, register }}>
+    <UserContext.Provider value={{ user, setUser, _setUser, register, allUsers, deleteUser }}>
       {children}
     </UserContext.Provider>
   );

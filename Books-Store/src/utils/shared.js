@@ -58,9 +58,8 @@ const hasAccess = (pathname, user) => {
   const navItem = NavigationItems.find((navItem) =>
     pathname.includes(navItem.route)
   );
-  console.log(navItem);
-  if (navItem) {
-    console.log(navItem.access && navItem.access.includes(user.roleId))
+ 
+  if (navItem) { 
     return (
       !navItem.access ||
       !!(navItem.access && navItem.access.includes(user.roleId))
