@@ -4,7 +4,7 @@ import tatvaLogo from "../assets/tatvaLogo.png";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import Button from '@mui/material/Button'; 
 import { MdShoppingCart } from "react-icons/md";
-import {useState, useContext} from 'react'
+import React,{useState, useContext} from 'react'
 import shared from "../utils/shared.js"
 import { UserContext } from "../context/User.js";
 
@@ -95,7 +95,7 @@ let realUser;
             {
               items.map((item) =>{ 
                 return (
-                   <>
+                   <React.Fragment key={item.route}>
                    {
                     shared.hasAccess(item.route, realUser) && (
                       <>
@@ -111,7 +111,7 @@ let realUser;
                     )
                    }
 
-                  </>
+                  </React.Fragment>
                 )
               })
             }

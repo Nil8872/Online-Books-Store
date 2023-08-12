@@ -3,6 +3,7 @@ import styles from "../styles/loginOrReg.module.css";
 import headerStyle from "../styles/header.module.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useCategory } from "../context/CustomHook";
 
 type BookData = {
   bookName: string;
@@ -15,7 +16,9 @@ const EditProductForm: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [filename, setFileName] = useState<string>("No choosen file");
   const [fileError, setFileError] = useState<string | null>(null);
+  const {categories} = useCategory();
 
+  console.log(categories);
 
   const initialValues: BookData = {
     bookName: "",
@@ -47,7 +50,6 @@ const EditProductForm: React.FC = () => {
       }
       formData.append("image", file )
       console.log(  file);
-      
 
       const options = {
         method: "POST",
@@ -65,9 +67,12 @@ const EditProductForm: React.FC = () => {
   });
  
 
-  function updateLabel() {}
+ 
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {  
+
+    
+
     if (e.target.files && e.target.files.length > 0) {
       setFileName(e.target.files[0].name);
       setFile(e.target.files[0]);
@@ -118,11 +123,12 @@ const EditProductForm: React.FC = () => {
                 id=""
                 style={{ width: "100%", height: "40px" }}
               >
-                <option value="category 1"> Category 1 </option>
-                <option value="category 2"> Category 2 </option>
-                <option value="category 3"> Category 3 </option>
-                <option value="category 4"> Category 4 </option>
-                <option value="category 5"> Category 5 </option>
+                {
+                  categories && categories.map(category=>{
+                    return <option value={category.name}>{category.name}</option>
+                  })
+                }
+            
               </select>
             </div>
             <div className={styles.rowHalf}>

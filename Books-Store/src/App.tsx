@@ -16,34 +16,34 @@ import Category from "./pages/Category";
 import User from "./context/User";
 import Book from "./pages/Book";
 import UserPage from "./pages/UserPage";
+import CategoryProvider from "./context/CategoryContext";
 
 function App() {
   return (
     <>
-    
       <Router>
         <User>
-        <Header/>
-        <ToastContainer/>
-        <SearchBar/>
-        <Routes> 
-          <Route path="/" element={<Home/>} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/product" element={<Product />} />
-          <Route path="/edit" element={<Edit />} />
-          <Route path="/productlisting" element={<ProductListing />} />
-          <Route path="/cartpage" element={<CartPage />} />
-          <Route path="/category" element={<Category />} />
-          <Route path="/book" element={<Book/>} />
-          <Route path="/update-profile" element={<UpdateProfile/>} /> 
-          <Route path="/user" element={<UserPage/>} />
-        </Routes>
-        <Footer/>
-      </User>
+          <CategoryProvider>
+            <Header />
+            <ToastContainer />
+            <SearchBar />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/product" element={<Product />} />
+              <Route path="/edit" element={<Edit />} />
+              <Route path="/productlisting" element={<ProductListing />} />
+              <Route path="/cartpage" element={<CartPage />} />
+              <Route path="/category" element={<Category />} />
+              <Route path="/book" element={<Book />} />
+              <Route path="/update-profile" element={<UpdateProfile />} />
+              <Route path="/user" element={<UserPage />} />
+            </Routes>
+            <Footer />
+          </CategoryProvider>
+        </User>
       </Router>
-
-       
     </>
   );
 }

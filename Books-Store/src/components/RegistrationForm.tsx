@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
  import {Role} from "../utils/enum.js"; 
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/Auth.js";
+import { useCategory } from "../context/CustomHook.js";
 
 
 type RegisterData = {
@@ -32,6 +33,9 @@ const validationSchema =  Yup.object({
 const RegistrationForm: React.FC <{mode: string}> = ({mode}) => {
    
   const navigate = useNavigate();
+  const {categories} = useCategory();
+
+   
 
   let user = localStorage.getItem("user");
   if(user){
@@ -46,7 +50,7 @@ const RegistrationForm: React.FC <{mode: string}> = ({mode}) => {
   const navigateString : string = mode === "register" ? "/login" : "/";
   const Method : string = mode === "register" ? "POST" : "PUT";
   
-  console.log(user);
+ 
 
   
   const initialValues: RegisterData =  {

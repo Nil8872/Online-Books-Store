@@ -36,7 +36,7 @@ const {deleteUser} = useAuth();
             {allUsers &&
               allUsers.map((user) => {
                 return (
-                  <>
+                  <React.Fragment key={user._id}>
                     <tr>
                       <td>{user.firstName}</td>
                       <td>{user.lastName}</td>
@@ -72,7 +72,7 @@ const {deleteUser} = useAuth();
                         </button>
                       </td>
                     </tr>
-                  </>
+                  </React.Fragment>
                 );
               })}
           </tbody>
