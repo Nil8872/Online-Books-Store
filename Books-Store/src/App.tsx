@@ -4,7 +4,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
 import Product from "./pages/Product";
-import Edit from "./pages/EditProduct";
+import AddBook from "./pages/AddBook";
 import ProductListing from "./pages/ProductListing";
 import CartPage from "./pages/CartPage";
 import Header from "./components/Header";
@@ -17,12 +17,14 @@ import User from "./context/User";
 import Book from "./pages/Book";
 import UserPage from "./pages/UserPage";
 import CategoryProvider from "./context/CategoryContext";
-
+import BookProvider from "./context/BookProvider"
+// import EditBook from "./pages/EditBook";
 function App() {
   return (
     <>
       <Router>
         <User>
+          <BookProvider>
           <CategoryProvider>
             <Header />
             <ToastContainer />
@@ -32,7 +34,8 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/product" element={<Product />} />
-              <Route path="/edit" element={<Edit />} />
+              <Route path="/book-add" element={<AddBook />} />
+              {/* <Route path="/book-edit" element={<EditBook />} /> */}
               <Route path="/productlisting" element={<ProductListing />} />
               <Route path="/cartpage" element={<CartPage />} />
               <Route path="/category" element={<Category />} />
@@ -42,6 +45,7 @@ function App() {
             </Routes>
             <Footer />
           </CategoryProvider>
+          </BookProvider>
         </User>
       </Router>
     </>

@@ -6,14 +6,18 @@ import ProductItem from './ProductItem'
 
 import { MdNavigateBefore } from "react-icons/md";
 import { MdNavigateNext } from "react-icons/md";
+import { useBooks } from '../context/CustomHook';
 
 
 const ProductList : React.FC = () => {
+
+  const {allBooks} = useBooks(); 
+  console.log(allBooks);
   return (
     <>
       <div className='container' style={{color:"#414141"}} >
          <div style={{display:"flex", justifyContent:"space-between", marginBottom:"30px"}}>
-            <div className={styles.productName}>Product Name  - 14366 items</div>
+            <div className={styles.productName}>Total - {allBooks?.length} items</div>
             <div className={styles.sotrBy}>
                 <span>Sort By </span>
                 <select name="" id="" style={{height:"40px", width:"200px", fontSize:"20px"}}>

@@ -34,9 +34,9 @@ function CategoryCRUD() {
     <>
       <div
         className="container"
-        style={{ marginTop: "32px", boxSizing: "border-box" }}
+        style={{ marginTop: "32px", boxSizing: "border-box",  }}
       >
-        <div style={{ display: "flex", justifyContent: "right" }}>
+        <div style={{ display: "flex", justifyContent: "right", marginBottom: "20px" }}>
           <input
             type="text"
             className="input"
@@ -63,7 +63,7 @@ function CategoryCRUD() {
 
         <table>
           <thead>
-            <tr style={{ paddingBottom: "15px", margin: "20px" }}>
+            <tr style={{ paddingBottom: "15px" }}>
               <th style={{ width: "10%" }}>Category Name</th>
 
               <th style={{ width: "0.1%" }}></th>

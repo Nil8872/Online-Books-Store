@@ -18,13 +18,20 @@ const toastStyles: ToastOptions<{
     theme: "colored",
   };
 
-export const CategoryContext = createContext({
-    categories : [],
-    deleteCategory: (id:string)=>{},
-    addCategory : (name: string) =>{},
-    updateCategory : (id:string, name:string) =>{},
-})
+  type Category = {
+    name:string;
+  }
 
+  type CategroryContext = {
+    categories : Category[],
+    deleteCategory : (id:string)=>void;
+    updateCategory : (id:string, name:string)=>void;
+    addCategory : (name:string)=>void;
+  }
+
+export const CategoryContext = createContext<CategroryContext | undefined>(undefined)
+
+ 
 type CategoryProps = {
     children : ReactNode
 }

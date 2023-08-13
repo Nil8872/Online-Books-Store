@@ -92,7 +92,7 @@ body{
 .grid{
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(277.67px, 277.67px));
- 
+ box-sizing: border-box;
   justify-content: center;
   align-items: center;
 }

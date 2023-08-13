@@ -101,7 +101,7 @@ let realUser;
                       <>
 
                      { <div className={style.headerRightItem} key={item.name}>
-                      <span style={{ color: "black" }}>|</span>
+                      <span style={{ color: "#888282" }}>|</span>
                     </div>}
                     <div className={style.headerRightItem}>
                       <Link className={style.headerRightItemLink} to={item.route}>{item.name}</Link>
