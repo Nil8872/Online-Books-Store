@@ -11,8 +11,7 @@ import { useBooks } from '../context/CustomHook';
 
 const ProductList : React.FC = () => {
 
-  const {allBooks} = useBooks(); 
-  console.log(allBooks);
+  const {allBooks} = useBooks();  
   return (
     <>
       <div className='container' style={{color:"#414141"}} >

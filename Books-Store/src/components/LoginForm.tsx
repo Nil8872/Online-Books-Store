@@ -8,6 +8,7 @@ import {toast, ToastContainer,ToastOptions} from "react-toastify"
 
 import {useContext} from "react";
 import { UserContext } from "../context/User";
+import { useCarts } from "../context/CustomHook";
 
 
 type InputData = {
@@ -30,13 +31,16 @@ const validationSchema = Yup.object({
 const LoginForm: React.FC = () => {
 
   const {setUser} = useContext(UserContext);
-
+  const {getAllCarts} = useCarts();
   const navigate = useNavigate();
   const { handleChange, handleSubmit, handleBlur, values, touched, errors } = useFormik({
     initialValues,
     onSubmit: async() => {
        
-      setUser(values);
+      const bool =  setUser(values);
+      if(bool){
+        getAllCarts()
+      }
 
     },
     validationSchema

@@ -7,6 +7,7 @@ import { MdShoppingCart } from "react-icons/md";
 import React,{useState, useContext} from 'react'
 import shared from "../utils/shared.js"
 import { UserContext } from "../context/User.js";
+import { useCarts } from "../context/CustomHook.js";
 
 
 const initialValue = {
@@ -22,15 +23,15 @@ const  Header: React.FC =()=> {
 
   const navigate = useNavigate();
   const {_setUser} = useContext(UserContext);
+  const {allCarts,setAllCarts} = useCarts();
 
 const items = shared.NavigationItems
   const [cartCount, setCartCount] = useState(0);  
 
 
  const hanldeLogout = ()=>{
-    localStorage.setItem("user", JSON.stringify(initialValue)
-    )
-
+    localStorage.setItem("user", JSON.stringify(initialValue))
+    setAllCarts([]);
     _setUser(initialValue)
     navigate("/");
  }
@@ -54,8 +55,9 @@ let realUser;
 
 
   const hadleCartClick = () => {
-    console.log("Clicked to cart");  
+     
     navigate("/cartpage");
+    
     //  return <Navigate to="/" replace={true} />;
   }
 
@@ -76,15 +78,25 @@ let realUser;
 
           <div className={style.headerRight}>
 
+            <div className={style.headerRightItem}>
+            <Link className={style.headerRightItemLink} to="/">Home</Link>
+          </div>
+
+
           {
+
             !(realUser?.roleId) && <>
+
+          <div className={style.headerRightItem}>
+            <span style={{ color: "#888282" }}>|</span>
+          </div>
                 <div className={style.headerRightItem}>
               <Link className={style.headerRightItemLink} to="/login">Login</Link>
             </div>
 
 
             <div className={style.headerRightItem}>
-              <span style={{ color: "black" }}>|</span>
+              <span style={{ color: "#888282" }}>|</span>
             </div>
 
             <div className={style.headerRightItem}>
@@ -118,7 +130,7 @@ let realUser;
             
             
              <Button color="secondary" onClick={hadleCartClick} variant="outlined" startIcon={<MdShoppingCart color="var(--red)"/>}>
-              <span style={{marginRight: "3px", color:"var(--red)"}}> {cartCount} </span>
+              <span style={{marginRight: "3px", color:"var(--red)"}}> {allCarts?.length || 0} </span>
         Cart
       </Button>
       {realUser.roleId ? <Button sx={{marginLeft: "10px"}} color="error" variant="contained" onClick={hanldeLogout} >Logout</Button>:null}

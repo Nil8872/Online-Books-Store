@@ -1,23 +1,24 @@
 import React,{useState} from 'react';
 import "../index.css";
 import styles from "../styles/cart.module.css";
+import { useCarts } from '../context/CustomHook';
 
 
  
 
-const Cart :  React.FC <{cartDetails:string}>= ({cartDetails}) =>{
+const Cart :  React.FC = ({cartDetails}) =>{
  
-  const [itemCount, setItemCount] = useState(0);
-  
+  const [itemCount, setItemCount] = useState(cartDetails?.quantity);
+  const {deleteCart} = useCarts();
 
-  const handleRemoveItem = () => {
-    console.log("Item is removed from cart");
+  const handleRemoveItem = (cartId:string) => {
+     deleteCart(cartId);
   }
   return (
     <>
       <div className={styles.card}>
               <div className={styles.imageBox}>
-                <img src={cartDetails} alt="Loading" height={"100%"} width={"100%"} />
+                <img src={`http://localhost:5000/${cartDetails?.book?.image}`} alt="Loading" height={"100%"} width={"100%"} />
               </div>
               <div className={styles.cardContent}>
                 <div
@@ -27,8 +28,8 @@ const Cart :  React.FC <{cartDetails:string}>= ({cartDetails}) =>{
                     marginBottom: "10px",
                   }}
                 >
-                  <div>Campus Sutra</div>
-                  <div>500</div>
+                  <div>{cartDetails?.book?.bookName}</div>
+                  <div>{cartDetails?.book?.price}</div>
                 </div>
 
                 <div
@@ -58,10 +59,11 @@ const Cart :  React.FC <{cartDetails:string}>= ({cartDetails}) =>{
                 >
                   <div>
                     <button
-                    onClick={()=> setItemCount(c=>c-1)}
+                    onClick={()=> setItemCount((c:number)=>c-1)}
                     disabled={itemCount === 0}
                       className="btn"
                       style={{
+                        background: itemCount === 0? "black": "var(--red)",
                         height: "20px",
                         width: "20px",
                         borderRadius: "2px",
@@ -81,7 +83,7 @@ const Cart :  React.FC <{cartDetails:string}>= ({cartDetails}) =>{
                       {itemCount}
                     </button>
                     <button
-                      onClick={()=>setItemCount(c=>c+1)}
+                      onClick={()=>setItemCount((c:number)=>c+1)}
                       className="btn"
                       style={{
                         height: "20px",
@@ -92,7 +94,7 @@ const Cart :  React.FC <{cartDetails:string}>= ({cartDetails}) =>{
                       +
                     </button>
                   </div>
-                  <div style={{ color: "var(--red)", cursor:"pointer" }} onClick={handleRemoveItem}>Remove</div>
+                  <div style={{ color: "var(--red)", cursor:"pointer" }} onClick={() => handleRemoveItem(cartDetails?._id)}>Remove</div>
                 </div>
               </div>
             </div>

@@ -40,10 +40,8 @@ const RegistrationForm: React.FC <{mode: string}> = ({mode}) => {
   let user = localStorage.getItem("user");
   if(user){
     user = JSON.parse(user); 
-  }else{
-    navigate("/login");
   } 
-  const {register} = useAuth();
+  const {register,updateUserByUser} = useAuth();
 
   
   const endPoint : string = mode === "register" ? "createuser" : "updateuser";
@@ -57,8 +55,8 @@ const RegistrationForm: React.FC <{mode: string}> = ({mode}) => {
     firstName: mode === "register" ? "": user.firstName,
     lastName: mode === "register" ? "": user.lastName,
     email:  mode === "register" ? "": user.email,
-    password: "",
-    cpassword: "",
+    password: mode === "register" ? "": user.cpassword,
+    cpassword: mode === "register" ? "": user.cpassword,
     roleId : mode === "register"?  Role.Seller : user?.roleId ,
   } 
 
@@ -73,9 +71,11 @@ const RegistrationForm: React.FC <{mode: string}> = ({mode}) => {
     onSubmit: async(values: RegisterData) => {
        
       
-         values = {...values, roleId: parseInt(values.roleId)}
-         
+      values = {...values, roleId: parseInt(values.roleId)}
+      
+        
         register(values,endPoint, Method,navigateString);
+       
      
       
     },

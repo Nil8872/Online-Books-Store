@@ -18,6 +18,7 @@ import Book from "./pages/Book";
 import UserPage from "./pages/UserPage";
 import CategoryProvider from "./context/CategoryContext";
 import BookProvider from "./context/BookProvider"
+import CartProvider from "./context/CartProvider";
 // import EditBook from "./pages/EditBook";
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <User>
           <BookProvider>
           <CategoryProvider>
+            <CartProvider>
             <Header />
             <ToastContainer />
             <SearchBar />
@@ -44,6 +46,7 @@ function App() {
               <Route path="/user" element={<UserPage />} />
             </Routes>
             <Footer />
+            </CartProvider>
           </CategoryProvider>
           </BookProvider>
         </User>

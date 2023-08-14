@@ -1,7 +1,9 @@
 import React from "react";
 import "../index.css";
 import styles from "../styles/productList.module.css";
-import { useBooks } from "../context/CustomHook";
+import { useBooks, useCarts } from "../context/CustomHook";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
  
 
@@ -10,6 +12,24 @@ import { useBooks } from "../context/CustomHook";
 const ProductItem: React.FC = () => {
 
   const {allBooks} = useBooks(); 
+  const {addToCart} = useCarts();
+  let user = localStorage.getItem("user");
+  const navigate = useNavigate();
+
+  if(user){
+    user = JSON.parse(user);
+  }
+
+  const handleAddToCart = (bookId) =>{
+    if(user?.roleId === 0){
+      toast.error("Please Login first!", {theme:"colored"})
+      navigate("/login");
+    }else{
+      console.log(bookId);
+      const cartData = {userId : user?._id, bookId, quantity: 1};
+      addToCart(cartData);
+    }
+  }
   return (
     <div className="container">
       <div className="grid">
@@ -49,6 +69,8 @@ const ProductItem: React.FC = () => {
                   <div style={{ marginBottom: "20px" }}>MRP &#8377;  {book.price}</div>
                   <button
                     className="btn"
+                    onClick={()=>handleAddToCart(book._id)}
+                    type="button"
                     style={{ width: "100%", height: "40px" }}
                   >
                     ADD TO CART

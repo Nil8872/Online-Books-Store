@@ -3,6 +3,7 @@ import "../index.css";
 import styles from "../styles/cart.module.css";
 import Cart from "./Cart";
 import { UserContext } from "../context/User";
+import { useCarts } from "../context/CustomHook";
 
 // type T = string | number;
 type T = string ;
@@ -21,10 +22,22 @@ const dataFromBackednd: Array<T> = [
 ];
 
 
+
+
 const CartDetails: React.FC = () => {
 
-  const {users} = useContext(UserContext);
-  console.log(users);
+  const {allCarts} =  useCarts();
+
+  const calculateTotalPrice = (allCarts)=>{
+    let total = 0;
+
+    allCarts.forEach( cart =>{
+      total += cart?.book?.price;
+    })
+
+    return total;
+  }
+
   return (
      
       <div className="container">
@@ -32,18 +45,18 @@ const CartDetails: React.FC = () => {
           <div className="row-column center">
             <div className={styles.cardTopHeading}>
               <div>
-                My Shoping Bag <span>(</span> <span>item {dataFromBackednd.length}</span> <span>)</span>
+                My Shoping Bag <span>(</span> <span>item {allCarts.length}</span> <span>)</span>
               </div>
               <div>
-                Total Price : <span>3000</span>
+                Total Price : <span>{calculateTotalPrice(allCarts)}</span>
               </div>
             </div>
 
-            {dataFromBackednd.map((cartDetails:string)=>{ 
+            {allCarts.map((cart)=>{ 
                
          return (
                 <>
-                <Cart cartDetails={ cartDetails} />
+                <Cart cartDetails={cart} />
                 </>
               )
             })}
