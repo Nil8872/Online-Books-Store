@@ -64,7 +64,7 @@ const  CartProvider: React.FC<CartProviderProps> = ({children}) => {
 
     useEffect(()=>{
         getAllCarts();
-    })
+    },[])
 
 
     const addToCart = async (cartData:addCartType) => {

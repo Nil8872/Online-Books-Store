@@ -38,7 +38,7 @@ const ProductItem: React.FC = () => {
           return (
             
               <div className="grid-item" key={book._id}>
-                <img src={`http://localhost:5000/${book.image}`} alt="Loading" className={styles.image} />
+                <img src={`${import.meta.env.VITE_BASE_URL}/${book.image}`} alt="Loading" className={styles.image} />
                 <div className={styles.itemInfoBox}>
                   <div className={styles.productTitle}>{(book.bookName).substring(0, 15)}{(book.bookName).length>15? "..." : null}</div>
                   <div className={styles.subTitle}>{book.category}</div>

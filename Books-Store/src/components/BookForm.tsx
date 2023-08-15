@@ -12,7 +12,7 @@ type BookData = {
   price: number;
   category: string;
   description: string;
-  image: string;
+  image?: string | File;
   _id?: string;
 };
 
@@ -44,7 +44,7 @@ const BookForm: React.FC<BookFormProps> = ({ mode, book, setEditMode }) => {
     price: mode === "add" ? 100 : book?.price,
     category: defaultCategoryName,
     description: mode === "add" ? "" : book?.description,
-    image: mode === "add" ? "" : book?.image,
+    // image: mode === "add" ? "" : book?.image,
   };
 
   useEffect(()=>{
@@ -98,16 +98,16 @@ const BookForm: React.FC<BookFormProps> = ({ mode, book, setEditMode }) => {
       )[0]?._id;
  
 
-      if(show){
-        formData.append("image", String(file));
+      if(show && file){
+        formData.append("image", file);
       }
       else{
         formData.append("image", String(book.image))
       }
 
 
-      formData.append("categoryId", categoryId);
-        console.log(formData)
+      formData.append("categoryId", categoryId); 
+
       if (mode === "add") {
         const result = addBook &&  addBook(formData);
         if(result){
@@ -216,7 +216,7 @@ const BookForm: React.FC<BookFormProps> = ({ mode, book, setEditMode }) => {
               </button>
               <div className={styles.rowHalf}>
                 <img
-                  src={`http://localhost:5000/${book?.image}`}
+                  src={`${import.meta.env.VITE_BASE_URL}/${book?.image}`}
                   alt=""
                   width={100}
                   height={100}

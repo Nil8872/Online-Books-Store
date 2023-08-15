@@ -13,8 +13,6 @@ type InputData = {
   password: string;
 };
 
-
-
 const initialValues: InputData = {
   email: "",
   password: "",

@@ -60,7 +60,7 @@ const BookProvider: React.FC <BookProps> = ({children}) => {
     }
   }
 
-  const addBook = async(formData:any)=>{
+  const addBook = async(formData: any)=>{
 
     const options = {
       method: "POST",
@@ -73,12 +73,13 @@ const BookProvider: React.FC <BookProps> = ({children}) => {
       if (data.success === true) {
         getAllBooks();
         toast.success(data.message, { theme: "colored" });
-        return true;
+    
         
       }
     } catch (error) {
       console.log(error);
-      return false;
+      toast.error("something went wrong", { theme: "colored" });
+     
     }
   }
  const updateBook = async(id:string, updatedData:any) =>{
