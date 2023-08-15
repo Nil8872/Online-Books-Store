@@ -1,8 +1,14 @@
 import React from 'react'
 import PageTitle from '../components/PageTitle'
 import BookForm from '../components/BookForm'
+import { BookData } from '../context/CustomHook'
 
-const  EditBook : React.FC = ({book, setEditMode})  =>{
+type EditBookProps ={
+  book: BookData;
+  setEditMode: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const  EditBook : React.FC <EditBookProps> = ({book, setEditMode})  =>{
   return (
     <>
       <PageTitle pageTitle='Edit Book' />

@@ -4,17 +4,19 @@ import "../index.css"
 import { useNavigate } from 'react-router-dom';
 import EditBook from '../pages/EditBook';
 import PageTitle from './PageTitle';
+import { BookData } from '../context/CustomHook';
+
 const  BookCRUD : React.FC = () => {
 
-  const [editMode, setEditMode] = useState(false);
-  const [selectedBook, setSelectedBook] = useState(null);
+  const [editMode, setEditMode] = useState<boolean>(false);
+  const [selectedBook, setSelectedBook] = useState<BookData|null>(null);
 
 
   const {allBooks, deleteBook} = useBooks();
   const navigate = useNavigate();
 
  
-  const handoleEditBook = (book) =>{
+  const handoleEditBook = (book: BookData) =>{
     setSelectedBook(book);
     setEditMode(true);
   }
@@ -22,7 +24,7 @@ const  BookCRUD : React.FC = () => {
 
   return (
     <>
-    {editMode ? <EditBook book={selectedBook} setEditMode={setEditMode}/> : 
+    {editMode && selectedBook ? <EditBook book={selectedBook} setEditMode={setEditMode}/> : 
 
     (<>
     <PageTitle pageTitle='Book Page' />
@@ -92,7 +94,7 @@ const  BookCRUD : React.FC = () => {
                   }}
                    
                 //   disabled={user.roleId === 1}
-                  onClick={()=> deleteBook(book._id)}
+                  onClick={()=> deleteBook && deleteBook(book._id)}
                 >
                   Delete
                 </button>

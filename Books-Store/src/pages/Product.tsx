@@ -6,8 +6,11 @@ import ProductDRUD from "../components/UserCRUD";
 
 import { MdNavigateBefore } from "react-icons/md";
 import { MdNavigateNext } from "react-icons/md";
+import { useAuth } from "../context/Auth";
 
 const Product: React.FC = () => {
+
+  const {allUsers} = useAuth()
   return (
     <>
        
@@ -29,7 +32,7 @@ const Product: React.FC = () => {
           </button>
         </div>
 
-        <ProductDRUD />
+        <ProductDRUD allUsers={allUsers} />
 
         <div
           style={{

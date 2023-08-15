@@ -1,25 +1,9 @@
-import React, { useContext } from "react";
 import "../index.css";
 import styles from "../styles/cart.module.css";
-import Cart from "./Cart";
-import { UserContext } from "../context/User";
+import Cart from "./Cart"; 
 import { useCarts } from "../context/CustomHook";
-
-// type T = string | number;
-type T = string ;
-
-const dataFromBackednd: Array<T> = [
-  "../assets/product1.jpg",
-  "../assets/product2.jpg",
-  "../assets/product3.jpg",
-  "../assets/product4.jpg",
-  "../assets/product4.jpg",
-  "../assets/product5.jpg",
-  "../assets/product10.jpg",
-  "../assets/product7.jpg",
-  "../assets/product7.jpg",
-  "../assets/product8.jpg",
-];
+import { CartData } from "../context/CartProvider";
+ 
 
 
 
@@ -28,10 +12,10 @@ const CartDetails: React.FC = () => {
 
   const {allCarts} =  useCarts();
 
-  const calculateTotalPrice = (allCarts)=>{
+  const calculateTotalPrice = (allCarts:CartData[])=>{
     let total = 0;
 
-    allCarts.forEach( cart =>{
+    allCarts.forEach( (cart:CartData) =>{
       total += cart?.book?.price;
     })
 

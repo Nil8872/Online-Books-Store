@@ -3,12 +3,9 @@ import styles from "../styles/loginOrReg.module.css";
 import { useFormik } from "formik";
 import {useNavigate} from "react-router-dom";
 import * as Yup from "yup";
-import {toast, ToastContainer,ToastOptions} from "react-toastify"
-// import axios from "axios";
-
-import {useContext} from "react";
-import { UserContext } from "../context/User";
+import { ToastContainer} from "react-toastify"
 import { useCarts } from "../context/CustomHook";
+import { useAuth } from "../context/Auth";
 
 
 type InputData = {
@@ -30,14 +27,14 @@ const validationSchema = Yup.object({
 
 const LoginForm: React.FC = () => {
 
-  const {setUser} = useContext(UserContext);
-  const {getAllCarts,setCartCount} = useCarts();
+  const {setUser} = useAuth()
+  const {getAllCarts} = useCarts();
   const navigate = useNavigate();
   const { handleChange, handleSubmit, handleBlur, values, touched, errors } = useFormik({
     initialValues,
     onSubmit: async() => {
        
-      const bool =  setUser(values);
+      const bool:boolean =  await setUser(values);
       if(bool){
       
         getAllCarts()

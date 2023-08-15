@@ -6,13 +6,13 @@ type CartProviderProps = {
     children : ReactNode
 }
 
-type addCartType = {
+ type addCartType = {
   userId :string;
   bookId :string;
   quantity :number;
 }
 
-type CartData = {
+export type CartData = {
     _id : string;
     userId : string;
     bookId : string;
@@ -31,7 +31,7 @@ type CartData = {
 const  CartProvider: React.FC<CartProviderProps> = ({children}) => {
 
     const [allCarts, setAllCarts] = useState<CartData[]>([]);
-    const [cartCount, setCartCount ] = useState(0);
+    // const [cartCount, setCartCount ] = useState<number>(0);
 
     const [user, setUser] = useState(() => {
       const savedUser = localStorage.getItem('user');
@@ -40,11 +40,10 @@ const  CartProvider: React.FC<CartProviderProps> = ({children}) => {
   
     
 
-    window.addEventListener('storage', function(e) {
-      console.log("I am called ", e);
+    window.addEventListener('storage', function(e) { 
       if (e.key === 'user') {
 
-        setUser(JSON.parse(e.newValue));
+        setUser(JSON.parse(String(e.newValue)));
       }
     });
     
@@ -53,7 +52,7 @@ const  CartProvider: React.FC<CartProviderProps> = ({children}) => {
 
       if(user.roleId !== 0){
 
-          const result =  await fetch(`${import.meta.env.VITE_BASE_URL}/cart/?userId=${user._id}`, {method: 'GET'})
+          const result =  await fetch(`${import.meta.env.VITE_BASE_URL}/api/cart/?userId=${user._id}`, {method: 'GET'})
           const data = await result.json();
 
           if(data.success ===true){
@@ -65,7 +64,7 @@ const  CartProvider: React.FC<CartProviderProps> = ({children}) => {
 
     useEffect(()=>{
         getAllCarts();
-    },[user])
+    })
 
 
     const addToCart = async (cartData:addCartType) => {
@@ -78,7 +77,7 @@ const  CartProvider: React.FC<CartProviderProps> = ({children}) => {
 
       try {
         
-        const result  = await fetch(`${import.meta.env.VITE_BASE_URL}/cart`, options);
+        const result  = await fetch(`${import.meta.env.VITE_BASE_URL}/api/cart`, options);
         const data = await result.json();
         if(data.success ===true){
           toast.success(data.message, {theme: "colored"});
@@ -97,7 +96,7 @@ const  CartProvider: React.FC<CartProviderProps> = ({children}) => {
       try {
         
       
-      const result = await fetch(`${import.meta.env.VITE_BASE_URL}/cart?cartId=${cartId}`, {method: "DELETE"});
+      const result = await fetch(`${import.meta.env.VITE_BASE_URL}/api/cart?cartId=${cartId}`, {method: "DELETE"});
       const data = await result.json();
 
       if(data.success === true){
@@ -113,7 +112,7 @@ const  CartProvider: React.FC<CartProviderProps> = ({children}) => {
     } 
 
   return (
-    <CartContext.Provider value={{allCarts,getAllCarts, setAllCarts, addToCart, deleteCart,setCartCount}}>
+    <CartContext.Provider value={{allCarts,getAllCarts, setAllCarts, addToCart, deleteCart}}>
       {children}
     </CartContext.Provider>
   )

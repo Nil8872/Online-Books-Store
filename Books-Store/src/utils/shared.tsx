@@ -1,4 +1,5 @@
 // import cartService from "../service/cart.service";
+import { UserData } from "../context/User";
 import { Role, RoutePaths } from "./enum";
 
 // const addToCart = async (book, id) => {
@@ -54,7 +55,7 @@ const NavigationItems = [
   },
 ];
 
-const hasAccess = (pathname, user) => {
+const hasAccess = (pathname: string, user:UserData) => {
   const navItem = NavigationItems.find((navItem) =>
     pathname.includes(navItem.route)
   );
@@ -68,11 +69,12 @@ const hasAccess = (pathname, user) => {
   return true;
 };
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default {
+const shared = {
   hasAccess,
   // addToCart,
   messages,
   LocalStorageKeys,
   NavigationItems,
 };
+ 
+export default  shared;

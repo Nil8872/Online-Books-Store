@@ -26,7 +26,7 @@ type CartContextType = {
     allCarts : CartData[];
     getAllCarts : ()=>void;
     setAllCarts : React.Dispatch<React.SetStateAction<CartData[]>>;
-    setCartCount : React.Dispatch<React.SetStateAction<number>>;
+    // setCartCount : React.Dispatch<React.SetStateAction<number>>;
     addToCart : (cardData: addCartType)=> void;
     deleteCart : (cardId: string) => void;
 }

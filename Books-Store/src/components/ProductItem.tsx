@@ -4,6 +4,7 @@ import styles from "../styles/productList.module.css";
 import { useBooks, useCarts } from "../context/CustomHook";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { UserData } from "../context/User";
 
  
 
@@ -13,20 +14,20 @@ const ProductItem: React.FC = () => {
 
   const {allBooks} = useBooks(); 
   const {addToCart} = useCarts();
-  let user = localStorage.getItem("user");
+  const user = localStorage.getItem("user");
   const navigate = useNavigate();
-
+  let realUser: UserData;
   if(user){
-    user = JSON.parse(user);
+    realUser = JSON.parse(user);
   }
 
-  const handleAddToCart = (bookId) =>{
-    if(user?.roleId === 0){
+  const handleAddToCart = (bookId: string) =>{
+    if(realUser.roleId === 0){
       toast.error("Please Login first!", {theme:"colored"})
       navigate("/login");
     }else{
       console.log(bookId);
-      const cartData = {userId : user?._id, bookId, quantity: 1};
+      const cartData = {userId : realUser?._id, bookId, quantity: 1};
       addToCart(cartData);
     }
   }
@@ -55,15 +56,7 @@ const ProductItem: React.FC = () => {
                       fontSize: "18px",
                     }}
                   >
-                    {/* <div style={{marginRight:"10px",}}>MRP</div> */}
-                    {/* <div style={{textDecoration: "line-through"}} >
-                      &#8377; 
-                    </div> */}
-                    {/* <div style={{textDecoration: "line-through"}}>{book.price}</div>
-                    <div className="mg-10" style={{ color: "green" }}>
-                      20.00% OFF
-                    </div> */}
-                    
+                   
                   </div>
                   </div>
                   <div style={{ marginBottom: "20px" }}>MRP &#8377;  {book.price}</div>

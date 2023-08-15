@@ -13,19 +13,22 @@ type BookData = {
   category: string;
   description: string;
   image: string;
+  _id?: string;
 };
 
 type BookFormProps = {
   mode: string;
   book: BookData;
-  setEditMode: React.FC;
+  setEditMode?: React.Dispatch<React.SetStateAction<boolean>> ;
 };
+
+ 
 
 const BookForm: React.FC<BookFormProps> = ({ mode, book, setEditMode }) => {
   const [file, setFile] = useState<File | null>(null);
   const [filename, setFileName] = useState<string>("No choosen Image");
   const [fileError, setFileError] = useState<string | null>(null);
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState<boolean>(false);
   const { categories } = useCategory();
   const { addBook, updateBook } = useBooks();
   const navigate = useNavigate();
@@ -41,6 +44,7 @@ const BookForm: React.FC<BookFormProps> = ({ mode, book, setEditMode }) => {
     price: mode === "add" ? 100 : book?.price,
     category: defaultCategoryName,
     description: mode === "add" ? "" : book?.description,
+    image: mode === "add" ? "" : book?.image,
   };
 
   useEffect(()=>{
@@ -75,30 +79,37 @@ const BookForm: React.FC<BookFormProps> = ({ mode, book, setEditMode }) => {
       }
       setFileError(null);
       const formData = new FormData();
-      console.log(values);
+      
+      // for (const key in values) {
+      //   formData.append(key, values[key] || initialValues[key]);
+      // }
+
       for (const key in values) {
-        formData.append(key, values[key] || initialValues[key]);
+        if (Object.prototype.hasOwnProperty.call(values, key)) {
+          const valueKey = key as keyof BookData;
+          formData.append(valueKey, String(values[valueKey]) || String(initialValues[valueKey]));
+        }
       }
+      
 
       const findCategory = values.category || initialValues.category;
       const categoryId = categories.filter(
         (category) => category.name === findCategory
       )[0]?._id;
-
-      console.log(categoryId);
+ 
 
       if(show){
-        formData.append("image", file);
+        formData.append("image", String(file));
       }
       else{
-        formData.append("image", book.image)
+        formData.append("image", String(book.image))
       }
 
 
       formData.append("categoryId", categoryId);
         console.log(formData)
       if (mode === "add") {
-        const result =  addBook(formData);
+        const result = addBook &&  addBook(formData);
         if(result){
           setFileName("No Choosen Image");
         setFile(null);
@@ -110,8 +121,9 @@ const BookForm: React.FC<BookFormProps> = ({ mode, book, setEditMode }) => {
         }
       }
       else{
-        updateBook(book._id, formData)
-        setEditMode(false);
+        book._id && ( updateBook && updateBook( book._id, formData))
+       
+       setEditMode &&  setEditMode(false);
       }
        
     },
@@ -129,7 +141,7 @@ const BookForm: React.FC<BookFormProps> = ({ mode, book, setEditMode }) => {
     if (mode === "add") {
       navigate("/book");
     } else {
-      setEditMode(false);
+     setEditMode && setEditMode(false);
     }
   };
 

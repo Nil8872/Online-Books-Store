@@ -20,6 +20,7 @@ const toastStyles: ToastOptions<{
 
   type Category = {
     name:string;
+    _id: string;
   }
 
   type CategroryContext = {
@@ -45,7 +46,7 @@ const  CategoryProvider: React.FC<CategoryProps> = ({children}) => {
         
         try {
             
-           const result = await fetch(`${import.meta.env.VITE_BASE_URL}/category/all`, {method: 'GET'})
+           const result = await fetch(`${import.meta.env.VITE_BASE_URL}/api/category/all`, {method: 'GET'})
            const data = await result.json();
            if(data.success === true) {
                setCategories(data.categories);
@@ -63,7 +64,7 @@ const  CategoryProvider: React.FC<CategoryProps> = ({children}) => {
     const deleteCategory = async(id: string) =>{
 
          try {
-            const result = await fetch(`${import.meta.env.VITE_BASE_URL}/category/${id}`, {method: 'DELETE'})
+            const result = await fetch(`${import.meta.env.VITE_BASE_URL}/api/category/${id}`, {method: 'DELETE'})
             const data = await result.json();
             if(data.success === true) {
                 toast.error(data.message, toastStyles);
@@ -82,7 +83,7 @@ const  CategoryProvider: React.FC<CategoryProps> = ({children}) => {
             body: JSON.stringify({name})
         }
         try {
-            const result = await fetch(`${import.meta.env.VITE_BASE_URL}/category`, options);
+            const result = await fetch(`${import.meta.env.VITE_BASE_URL}/api/category`, options);
             const data = await result.json();
             if(data.success === true) {
                 toast.success(data.message, toastStyles);
@@ -101,7 +102,7 @@ const  CategoryProvider: React.FC<CategoryProps> = ({children}) => {
             body: JSON.stringify({name})
         }
         try {
-            const result = await fetch(`${import.meta.env.VITE_BASE_URL}/category/${id}`, options)
+            const result = await fetch(`${import.meta.env.VITE_BASE_URL}/api/category/${id}`, options)
             const data = await result.json();
             if(data.success === true) {
                 console.log(data)

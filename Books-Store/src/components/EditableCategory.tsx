@@ -6,7 +6,7 @@ type EditableCategoryProps ={
         name: string;
         _id: string;
     },
-    setEditableCategory : React.FC,
+    setEditableCategory : React.Dispatch<React.SetStateAction<string[]>>,
     editableCategory: Array<string>
 }
 

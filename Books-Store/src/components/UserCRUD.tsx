@@ -14,7 +14,7 @@ type UserData =
       role: string;
     }
 type UserCRUDProps ={
-  allUsers: Array<UserData>;
+  allUsers: UserData[];
 }
 
 const UserCRUD: React.FC<UserCRUDProps> = ({ allUsers}) => {

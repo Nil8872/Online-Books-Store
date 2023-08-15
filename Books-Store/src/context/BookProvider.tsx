@@ -31,7 +31,7 @@ const BookProvider: React.FC <BookProps> = ({children}) => {
     method : "GET",
     headers: {"Content-Type": "application/json"}
   }      
-      const result = await fetch(`${import.meta.env.VITE_BASE_URL}/book/all`,options)
+      const result = await fetch(`${import.meta.env.VITE_BASE_URL}/api/book/all`,options)
     const data = await result.json();
 
     if(data.success === true) {
@@ -49,7 +49,7 @@ const BookProvider: React.FC <BookProps> = ({children}) => {
   const deleteBook = async(id:string)=>{
 
     try {
-      const result = await fetch(`${import.meta.env.VITE_BASE_URL}/book/?id=${id}`, {method:"DELETE"});
+      const result = await fetch(`${import.meta.env.VITE_BASE_URL}/api/book/?id=${id}`, {method:"DELETE"});
       const data = await result.json();
       if(data.success === true){
         toast.success(data.message, {theme: "colored"})
@@ -60,7 +60,7 @@ const BookProvider: React.FC <BookProps> = ({children}) => {
     }
   }
 
-  const addBook = async(formData)=>{
+  const addBook = async(formData:any)=>{
 
     const options = {
       method: "POST",
@@ -68,7 +68,7 @@ const BookProvider: React.FC <BookProps> = ({children}) => {
     };
 
     try {
-      const result = await fetch(`${import.meta.env.VITE_BASE_URL}/book`,options);
+      const result = await fetch(`${import.meta.env.VITE_BASE_URL}/api/book`,options);
       const data = await result.json();
       if (data.success === true) {
         getAllBooks();
@@ -81,11 +81,11 @@ const BookProvider: React.FC <BookProps> = ({children}) => {
       return false;
     }
   }
- const updateBook = async(id:string, updatedData) =>{
+ const updateBook = async(id:string, updatedData:any) =>{
     try {
       
        console.log(updatedData);
-     const result =  await fetch(`${import.meta.env.VITE_BASE_URL}/book/${id}`, {method : "PUT", body: updatedData} )
+     const result =  await fetch(`${import.meta.env.VITE_BASE_URL}/api/book/${id}`, {method : "PUT", body: updatedData} )
      const data = await result.json();
 
      if(data.success === true) {
@@ -99,7 +99,7 @@ const BookProvider: React.FC <BookProps> = ({children}) => {
     }
  }
 
- const getBookById = async(id:string) =>{}
+//  const getBookById = async(id:string) =>{}
   return (
     <BookContext.Provider value={{allBooks:books, getAllBooks, deleteBook, updateBook, addBook}}>
       {children}

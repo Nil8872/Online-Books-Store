@@ -1,32 +1,37 @@
 import style from "../styles/header.module.css";
+import React from "react"
 import "../index.css";
 import tatvaLogo from "../assets/tatvaLogo.png";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from '@mui/material/Button'; 
-import { MdShoppingCart } from "react-icons/md";
-import React,{useState, useContext} from 'react'
-import shared from "../utils/shared.js"
-import { UserContext } from "../context/User.js";
+import { MdShoppingCart } from "react-icons/md"; 
+import shared from "../utils/shared.js" 
 import { useCarts } from "../context/CustomHook.js";
+import { useAuth } from "../context/Auth.js";
+import { UserData } from "../context/User.js";
 
 
-const initialValue = {
+const initialValue: UserData = {
   
     firstName: "",
  lastName : "",
  roleId : 0,
- _id: 1,
- email: ""
+ _id: "1",
+ email: "",
+ password: "",
+ cpassword: "",
+ role:""
+
 }
 
 const  Header: React.FC =()=> { 
 
   const navigate = useNavigate();
-  const {_setUser} = useContext(UserContext);
+ const {_setUser} = useAuth();
   const {allCarts,setAllCarts} = useCarts();
 
 const items = shared.NavigationItems
-  const [cartCount, setCartCount] = useState(0);  
+  // const [cartCount, setCartCount] = useState(0);  
 
 
  const hanldeLogout = ()=>{
@@ -37,16 +42,10 @@ const items = shared.NavigationItems
  }
    
 
-let realUser;
+let realUser: UserData;
   const user = localStorage.getItem("user") 
   if(!user){
-    realUser = {
-      firstName: "",
-    lastName : "",
-    roleId : 0  ,
-    _id: 1,
-    email: "",
-    }
+    realUser =  initialValue;
   }
   else{
      realUser = JSON.parse(user);

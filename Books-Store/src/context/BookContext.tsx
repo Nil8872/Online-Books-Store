@@ -1,26 +1,22 @@
 import React from 'react';
-
-type BookData = {
-    bookName: string;
-    _id: string;
-    description: string;
-    category: string;
-    image: string;
-    price: number;
-  }
+import {BookData} from "./CustomHook"
+ 
 
   type BookContextType = {
-    allBooks: BookData[];
-    // ... other potential methods or properties for the context
+    allBooks: BookData[]; 
     getAllBooks?: () => void;
     
     deleteBook?:(id:string) => void;
-    updateBook?:(id:string, updatedData) => void;
+    updateBook?:(id:string, updatBedData:any) => void;
     getBookById?: (id:string) => BookData;
     addBook?:(book:BookData) => void;
   }
 
  
-const BookContext = React.createContext<BookContextType | undefined>(undefined);
+const BookContext = React.createContext<BookContextType | undefined>({
+  allBooks : [],
+  deleteBook : ()=>{console.warn("deleteBook not implemented")},
+
+});
 
 export default BookContext;

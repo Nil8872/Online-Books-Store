@@ -2,11 +2,13 @@ import React,{useState} from 'react';
 import "../index.css";
 import styles from "../styles/cart.module.css";
 import { useCarts } from '../context/CustomHook';
+import { CartData } from '../context/CartProvider';
 
+type CartProps = {
+  cartDetails : CartData,
+}
 
- 
-
-const Cart :  React.FC = ({cartDetails}) =>{
+const Cart :  React.FC<CartProps> = ({cartDetails}) =>{
  
   const [itemCount, setItemCount] = useState(cartDetails?.quantity);
   const {deleteCart} = useCarts();

@@ -4,10 +4,9 @@ import btnStyles from "../styles/header.module.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";   
 import 'react-toastify/dist/ReactToastify.css';
- import {Role} from "../utils/enum.js"; 
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/Auth.js";
-import { useCategory } from "../context/CustomHook.js";
+ import {Role} from "../utils/enum.tsx"; 
+import { useAuth } from "../context/Auth.tsx";
+import { UserData } from "../context/User.tsx"; 
 
 
 type RegisterData = {
@@ -32,16 +31,24 @@ const validationSchema =  Yup.object({
 
 const RegistrationForm: React.FC <{mode: string}> = ({mode}) => {
    
-  const navigate = useNavigate();
-  const {categories} = useCategory();
+  
 
-   
-
-  let user = localStorage.getItem("user");
+  
+  let realUser : UserData ={
+    firstName: "", 
+    lastName : "",
+    email: "",
+    roleId: 0,
+    role: "",
+    _id:"",
+    password: "",
+    cpassword: "",
+  };
+  const user = localStorage.getItem("user");
   if(user){
-    user = JSON.parse(user); 
+    realUser  = JSON.parse(user); 
   } 
-  const {register,updateUserByUser} = useAuth();
+  const {register} = useAuth();
 
   
   const endPoint : string = mode === "register" ? "createuser" : "updateuser";
@@ -52,12 +59,12 @@ const RegistrationForm: React.FC <{mode: string}> = ({mode}) => {
 
   
   const initialValues: RegisterData =  {
-    firstName: mode === "register" ? "": user.firstName,
-    lastName: mode === "register" ? "": user.lastName,
-    email:  mode === "register" ? "": user.email,
-    password: mode === "register" ? "": user.cpassword,
-    cpassword: mode === "register" ? "": user.cpassword,
-    roleId : mode === "register"?  Role.Seller : user?.roleId ,
+    firstName: mode === "register" ? "": realUser.firstName,
+    lastName: mode === "register" ? "": realUser.lastName,
+    email:  mode === "register" ? "": realUser.email,
+    password: mode === "register" ? "": realUser.cpassword,
+    cpassword: mode === "register" ? "": realUser.cpassword,
+    roleId : mode === "register"?  Role.Seller : realUser?.roleId ,
   } 
 
   const { values,
@@ -71,7 +78,7 @@ const RegistrationForm: React.FC <{mode: string}> = ({mode}) => {
     onSubmit: async(values: RegisterData) => {
        
       
-      values = {...values, roleId: parseInt(values.roleId)}
+      values = {...values, roleId: parseInt(String(values.roleId))}
       
         
         register(values,endPoint, Method,navigateString);
@@ -140,7 +147,7 @@ const RegistrationForm: React.FC <{mode: string}> = ({mode}) => {
                 className="input"
                 type="email"
                 name="email"
-                value={mode==="update"?  values.email = user?.email:  values.email}
+                value={mode==="update"?  values.email = realUser?.email:  values.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 disabled={mode === "update"}

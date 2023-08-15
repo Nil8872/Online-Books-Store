@@ -1,16 +1,21 @@
 import React,{useState} from "react";
 import {Role} from "../utils/enum";
 import { useAuth } from "../context/Auth";
+
+type UserData = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: string;
+  roleId: number;
+  _id: string;
+}
+
+ 
 type UserEditableProps = {
-  user: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    role: string;
-    roleId: number;
-  };
-  editableUsers: Array<string>;
-  setEditableUsers: React.FC;
+  user: UserData;
+  editableUsers: string[];
+  setEditableUsers: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
 type UpdateUserData = {
@@ -35,15 +40,22 @@ const UserEditableCRUD: React.FC<UserEditableProps> = ({user, editableUsers, set
     setEditableUsers(editableUsers.filter((Id: string) => Id !== id));
   };
   
-  const handleChange = (e)=>{
-    setUserEditData({...userEditData, [e.target.name]: e.target.value})
+  const handleChange = (e : React.ChangeEvent<HTMLInputElement>)=>{
+    const {name, value} = e.target;
+
+    setUserEditData((prev)=> ({...prev, [name as keyof UpdateUserData]: value} ))
+  }
+  
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) =>{
+   const {name, value} = e.target;
+    setUserEditData((prev)=> ({...prev, [name as keyof UpdateUserData]: value} ))
   }
   
   const handleUpdateUser = (userId:string)=>{
-    const updatedData =  {...userEditData, roleId : parseInt(userEditData.roleId)};
+    const updatedData =  {...userEditData, roleId : parseInt(String(userEditData.roleId))};
     
     updateUserByAdmin(userId, updatedData)
-    setEditableUsers(editableUsers.filter((Id: string) => Id !== userId));
+    setEditableUsers(editableUsers.filter((Id:string) => Id !== userId));
      
   }
 
@@ -79,7 +91,7 @@ const UserEditableCRUD: React.FC<UserEditableProps> = ({user, editableUsers, set
             className="input"
             style={{width: "50%"}}
             value={userEditData.roleId}
-            onChange={handleChange}
+            onChange={handleSelectChange}
           >
             <option   style={{ fontSize: "16px" }} value={Role.Admin}>
               Admin

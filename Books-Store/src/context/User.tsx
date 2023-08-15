@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
  
 
-type UserData = {
+export type UserData = {
   firstName: string;
   lastName: string;
   email:string;
@@ -15,15 +15,23 @@ type UserData = {
   cpassword : string;
 }
 
-type  UserContextType = {
-  alluser: UserData[] ;
+type Bool = boolean;
+
+export type  UserContextType = {
+  allUsers: UserData[] ;
   user: UserData;
-  setUser: ()=>void;
-   _setUser: ()=>void;
-    register: ()=>void;
+  setUser: (loginData : LoginData)=> Promise<Bool>;
+   _setUser: React.Dispatch<React.SetStateAction<UserData>>;
+   
+   register: (
+      values: RegisterData,
+      endPoint: string,
+      Method: string,
+      navigateString: string )=>void;
+
     deleteUser: (id:string)=>void;
     updateUserByAdmin: (id:string, updatedData : UpdatedData) => void;
-    updateUserByUser : (id:string, updatedData : UpdatedData) => void;
+    updateUserByUser : (updatedData : RegisterData) => void;
 }
 
 export const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -68,13 +76,13 @@ type ErrorObject = {
 
 
 
-type SuccessObject = {
-  success: boolean;
-  message: string;
-  user: RegisterData;
-  users: Array<UserData>;
-};
-type Data = { errors: ErrorObject[] } | SuccessObject;
+// type SuccessObject = {
+//   success: boolean;
+//   message: string;
+//   user: RegisterData;
+//   users: Array<UserData>;
+// };
+// type Data = { errors: ErrorObject[] } | SuccessObject;
 
 type UserProps = {
   children : ReactNode
@@ -101,7 +109,7 @@ const initialValues = {
 
 }
   const [user, _setUser] = useState<UserData>(initialValues);
-  const [allUsers, setAllUsers] = useState([]);
+  const [allUsers, setAllUsers] = useState<UserData[]>([]);
 
   const getAllUsers = async() =>{
     try {
@@ -114,11 +122,11 @@ const initialValues = {
       };
   
       const result = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/auth/all`,
+        `${import.meta.env.VITE_BASE_URL}/api/auth/all`,
         options
       );
   
-      const data: Data = await result.json();
+      const data = await result.json();
   
       if (data.success === true) {
          setAllUsers(data.users);
@@ -141,9 +149,6 @@ const initialValues = {
       getAllUsers();  
   },[])
  
- 
-
-
 
   const setUser = async (values: LoginData) => {
     try {
@@ -157,11 +162,11 @@ const initialValues = {
       };
 
       const result = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/auth/login`,
+        `${import.meta.env.VITE_BASE_URL}/api/auth/login`,
         options
       );
 
-      const data: Data = await result.json();
+      const data = await result.json();
 
       if (data.success === true) {
         _setUser(data.user);
@@ -181,9 +186,11 @@ const initialValues = {
           });
         }
         toast.error(data.message, toastStyles);
+        return false;
       }
     } catch (error) {
       console.log("error: ", error);
+      return false
     }
   };
 
@@ -204,11 +211,11 @@ const initialValues = {
 
     try {
       const result = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/auth/${endPoint}`,
+        `${import.meta.env.VITE_BASE_URL}/api/auth/${endPoint}`,
         options
       );
 
-      const data: Data = await result.json();
+      const data = await result.json();
 
       if (data.success === true) {
         if(endPoint === "updateuser"){
@@ -243,7 +250,7 @@ const initialValues = {
 
     try {
       const result = await fetch(`${import.meta.env.VITE_BASE_URL}/auth/user`, options)
-      const data : Data = await result.json(); 
+      const data  = await result.json(); 
       if(data.success === true){
         toast.success(data.message, toastStyles);
         getAllUsers();
@@ -268,8 +275,8 @@ const initialValues = {
     }
 
     try {
-      const result = await fetch(`${import.meta.env.VITE_BASE_URL}/auth/updatebyadmin/${userId}`, options)
-      const data : Data = await result.json(); 
+      const result = await fetch(`${import.meta.env.VITE_BASE_URL}/api/auth/updatebyadmin/${userId}`, options)
+      const data  = await result.json(); 
       console.log(data);
       if(data.success === true){
         toast.success(data.message, toastStyles);
@@ -282,7 +289,7 @@ const initialValues = {
     }
   }
 
-  const updateUserByUser = async(updatedData) =>{
+  const updateUserByUser = async(updatedData:RegisterData) =>{
     const options ={
       method: "PUT",
       headers : { "Content-Type": "application/json"},
@@ -290,8 +297,8 @@ const initialValues = {
     }
 
     try {
-      const result = await fetch(`${import.meta.env.VITE_BASE_URL}/auth/updateuser`, options)
-      const data : Data = await result.json(); 
+      const result = await fetch(`${import.meta.env.VITE_BASE_URL}/api/auth/updateuser`, options)
+      const data  = await result.json(); 
      
       if(data.success === true){
         toast.success(data.message, toastStyles);
