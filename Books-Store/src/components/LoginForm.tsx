@@ -31,7 +31,7 @@ const validationSchema = Yup.object({
 const LoginForm: React.FC = () => {
 
   const {setUser} = useContext(UserContext);
-  const {getAllCarts} = useCarts();
+  const {getAllCarts,setCartCount} = useCarts();
   const navigate = useNavigate();
   const { handleChange, handleSubmit, handleBlur, values, touched, errors } = useFormik({
     initialValues,
@@ -39,6 +39,7 @@ const LoginForm: React.FC = () => {
        
       const bool =  setUser(values);
       if(bool){
+      
         getAllCarts()
       }
 

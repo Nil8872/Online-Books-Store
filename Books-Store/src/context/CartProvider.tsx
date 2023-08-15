@@ -31,23 +31,33 @@ type CartData = {
 const  CartProvider: React.FC<CartProviderProps> = ({children}) => {
 
     const [allCarts, setAllCarts] = useState<CartData[]>([]);
+    const [cartCount, setCartCount ] = useState(0);
 
-    let user = localStorage.getItem('user');
+    const [user, setUser] = useState(() => {
+      const savedUser = localStorage.getItem('user');
+      return savedUser ? JSON.parse(savedUser) : null;
+  });
+  
+    
 
-    if(user){
-        user = JSON.parse(user);
-    }
+    window.addEventListener('storage', function(e) {
+      console.log("I am called ", e);
+      if (e.key === 'user') {
+
+        setUser(JSON.parse(e.newValue));
+      }
+    });
+    
 
     const getAllCarts = async () => {
 
-      if(user){
+      if(user.roleId !== 0){
 
           const result =  await fetch(`${import.meta.env.VITE_BASE_URL}/cart/?userId=${user._id}`, {method: 'GET'})
           const data = await result.json();
 
           if(data.success ===true){
-              setAllCarts(data.result);
-              console.log(data.result);
+              setAllCarts(data.result); 
             }
         }
          
@@ -55,7 +65,7 @@ const  CartProvider: React.FC<CartProviderProps> = ({children}) => {
 
     useEffect(()=>{
         getAllCarts();
-    },[])
+    },[user])
 
 
     const addToCart = async (cartData:addCartType) => {
@@ -103,7 +113,7 @@ const  CartProvider: React.FC<CartProviderProps> = ({children}) => {
     } 
 
   return (
-    <CartContext.Provider value={{allCarts,getAllCarts, setAllCarts, addToCart, deleteCart}}>
+    <CartContext.Provider value={{allCarts,getAllCarts, setAllCarts, addToCart, deleteCart,setCartCount}}>
       {children}
     </CartContext.Provider>
   )
