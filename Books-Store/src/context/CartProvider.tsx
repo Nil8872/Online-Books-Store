@@ -1,6 +1,7 @@
 import React,{ReactNode, useState, useEffect} from 'react'
 import CartContext from './CartContext'
 import {toast} from "react-toastify"
+import { useLoading } from './CustomHook'
 
 type CartProviderProps = {
     children : ReactNode
@@ -32,6 +33,7 @@ const  CartProvider: React.FC<CartProviderProps> = ({children}) => {
 
     const [allCarts, setAllCarts] = useState<CartData[]>([]);
     // const [cartCount, setCartCount ] = useState<number>(0);
+    const {setLoading} = useLoading();
 
     const [user, setUser] = useState(() => {
       const savedUser = localStorage.getItem('user');
@@ -76,6 +78,7 @@ const  CartProvider: React.FC<CartProviderProps> = ({children}) => {
       }
 
       try {
+        setLoading(true);
         
         const result  = await fetch(`${import.meta.env.VITE_BASE_URL}/api/cart`, options);
         const data = await result.json();
@@ -88,6 +91,8 @@ const  CartProvider: React.FC<CartProviderProps> = ({children}) => {
         }
       } catch (error) {
         toast.error("Something went wrong");
+      }finally{
+        setLoading(false);
       }
     }
       
@@ -95,7 +100,7 @@ const  CartProvider: React.FC<CartProviderProps> = ({children}) => {
 
       try {
         
-      
+      setLoading(true);
       const result = await fetch(`${import.meta.env.VITE_BASE_URL}/api/cart?cartId=${cartId}`, {method: "DELETE"});
       const data = await result.json();
 
@@ -108,6 +113,9 @@ const  CartProvider: React.FC<CartProviderProps> = ({children}) => {
       }
     } catch (error) {
         toast.error("Something went wrong!", {theme:"colored"});
+    }
+    finally{
+      setLoading(false);
     }
     } 
 

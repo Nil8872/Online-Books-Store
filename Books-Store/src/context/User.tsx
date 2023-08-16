@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
 import { toast, ToastOptions } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useLoading } from "./CustomHook";
 
  
 
@@ -96,7 +97,7 @@ type UpdatedData = {
 
 const User: React.FC <UserProps> = ({ children }) => {
   const navigate = useNavigate();
-
+const {setLoading}  =useLoading();
 const initialValues = {
   firstName : "",
   lastName: "",
@@ -153,6 +154,8 @@ const initialValues = {
   const setUser = async (values: LoginData) => {
     try {
 
+      setLoading(true);
+
       const options = {
         method: "POST",
         headers: {
@@ -190,7 +193,10 @@ const initialValues = {
       }
     } catch (error) {
       console.log("error: ", error);
+      toast.error("Something went wrong", toastStyles);
       return false
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -210,6 +216,7 @@ const initialValues = {
 
 
     try {
+      setLoading(true)
       const result = await fetch(
         `${import.meta.env.VITE_BASE_URL}/api/auth/${endPoint}`,
         options
@@ -237,6 +244,9 @@ const initialValues = {
 
     } catch (error) {
       console.log(error);
+      toast.error("Something went wrong", toastStyles);
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -249,6 +259,7 @@ const initialValues = {
     }
 
     try {
+      setLoading(true)
       const result = await fetch(`${import.meta.env.VITE_BASE_URL}/auth/user`, options)
       const data  = await result.json(); 
       if(data.success === true){
@@ -263,6 +274,10 @@ const initialValues = {
 
     } catch (error) {
       console.log(error);
+      toast.error("Something went wrong", toastStyles);
+    }
+    finally{
+      setLoading(false);
     }
     
   }
@@ -275,6 +290,7 @@ const initialValues = {
     }
 
     try {
+      setLoading(true);
       const result = await fetch(`${import.meta.env.VITE_BASE_URL}/api/auth/updatebyadmin/${userId}`, options)
       const data  = await result.json(); 
       console.log(data);
@@ -286,6 +302,10 @@ const initialValues = {
 
     } catch (error) {
       console.log(error);
+      toast.error("Something went wrong", toastStyles)
+    }
+    finally{
+      setLoading(false);
     }
   }
 
@@ -297,6 +317,7 @@ const initialValues = {
     }
 
     try {
+      setLoading(true);
       const result = await fetch(`${import.meta.env.VITE_BASE_URL}/api/auth/updateuser`, options)
       const data  = await result.json(); 
      
@@ -305,10 +326,19 @@ const initialValues = {
         getAllUsers();
         localStorage.setItem("user", data.user)
       }
+      else{
+
+        toast.error(data.message, toastStyles);
+      }
+      
        
 
     } catch (error) {
       console.log(error);
+      toast.error("Something went wrong!", toastStyles);
+    }
+    finally{
+      setLoading(false);
     }
   }
  

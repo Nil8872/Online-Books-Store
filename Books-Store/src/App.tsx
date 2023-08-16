@@ -19,11 +19,17 @@ import UserPage from "./pages/UserPage";
 import CategoryProvider from "./context/CategoryContext";
 import BookProvider from "./context/BookProvider"
 import CartProvider from "./context/CartProvider";
+import GlobalLoadingProvider from "./context/GlobalLoadingProvider";
+import GlobalLoader from "./components/GlobalLoader";
+
+
 // import EditBook from "./pages/EditBook";
 function App() {
   return (
     <>
       <Router>
+        <GlobalLoadingProvider>
+          <GlobalLoader/>
         <User>
           <BookProvider>
           <CategoryProvider>
@@ -50,6 +56,7 @@ function App() {
           </CategoryProvider>
           </BookProvider>
         </User>
+        </GlobalLoadingProvider>
       </Router>
     </>
   );

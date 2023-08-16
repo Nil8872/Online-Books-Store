@@ -9,7 +9,7 @@ import {BookData} from "./CustomHook"
     deleteBook?:(id:string) => void;
     updateBook?:(id:string, updatBedData:any) => void;
     getBookById?: (id:string) => BookData;
-    addBook?:(book:BookData) => void;
+    addBook?:(book:any) => void;
   }
 
  

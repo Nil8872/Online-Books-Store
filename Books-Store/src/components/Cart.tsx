@@ -20,7 +20,7 @@ const Cart :  React.FC<CartProps> = ({cartDetails}) =>{
     <>
       <div className={styles.card}>
               <div className={styles.imageBox}>
-                <img src={`http://localhost:5000/${cartDetails?.book?.image}`} alt="Loading" height={"100%"} width={"100%"} />
+                <img src={cartDetails.book.image} alt="Loading" height={"100%"} width={"100%"} />
               </div>
               <div className={styles.cardContent}>
                 <div

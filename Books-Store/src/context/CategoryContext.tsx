@@ -1,5 +1,6 @@
 import React, {createContext, ReactNode, useState, useEffect} from 'react'
 import {toast, ToastOptions} from 'react-toastify'
+import { useLoading } from './CustomHook';
 
 
 const toastStyles: ToastOptions<{
@@ -40,20 +41,27 @@ type CategoryProps = {
 const  CategoryProvider: React.FC<CategoryProps> = ({children}) => {
 
     const [categories, setCategories] = useState([]);
-
+    const {setLoading} = useLoading();
 
     const getAllCategories = async() =>{
         
         try {
-            
+            setLoading(true);
            const result = await fetch(`${import.meta.env.VITE_BASE_URL}/api/category/all`, {method: 'GET'})
            const data = await result.json();
            if(data.success === true) {
                setCategories(data.categories);
             }
+            else{
+                toast.error(data.message, {theme: "colored"})
+            }
              
         } catch (error) {
             console.log(error);
+            toast.error("Something went wrong!", {theme:"colored"})
+        }
+        finally{
+            setLoading(false);
         }
     }
 
@@ -64,15 +72,22 @@ const  CategoryProvider: React.FC<CategoryProps> = ({children}) => {
     const deleteCategory = async(id: string) =>{
 
          try {
+            setLoading(true);
             const result = await fetch(`${import.meta.env.VITE_BASE_URL}/api/category/${id}`, {method: 'DELETE'})
             const data = await result.json();
             if(data.success === true) {
                 toast.error(data.message, toastStyles);
                 getAllCategories();
             }
+            else{
+                toast.error(data.message, toastStyles);
+            }
             
          } catch (error) {
             console.log(error);
+            toast.error("Something went wrong", toastStyles);
+         }finally{
+            setLoading(false);
          }
     }
 
@@ -83,14 +98,22 @@ const  CategoryProvider: React.FC<CategoryProps> = ({children}) => {
             body: JSON.stringify({name})
         }
         try {
+            setLoading(true);
             const result = await fetch(`${import.meta.env.VITE_BASE_URL}/api/category`, options);
             const data = await result.json();
             if(data.success === true) {
                 toast.success(data.message, toastStyles);
                 getAllCategories();
             }
+            else{
+                toast.error(data.message, toastStyles)
+            }
         } catch (error) {
             console.log(error);
+            toast.error("Something went wrong", toastStyles);
+        }
+        finally{
+            setLoading(false);
         }
     }
 
@@ -102,16 +125,23 @@ const  CategoryProvider: React.FC<CategoryProps> = ({children}) => {
             body: JSON.stringify({name})
         }
         try {
+            setLoading(true);
             const result = await fetch(`${import.meta.env.VITE_BASE_URL}/api/category/${id}`, options)
             const data = await result.json();
             if(data.success === true) {
                 console.log(data)
                 toast.success(data.message, toastStyles);
                 getAllCategories();
+            }else{
+                toast.error(data.message, toastStyles)
             }
             
          } catch (error) {
             console.log(error);
+            toast.error("Something went wrong ", toastStyles)
+         }
+         finally{
+            setLoading(false);
          }
     }
     

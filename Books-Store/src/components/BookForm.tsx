@@ -12,7 +12,7 @@ type BookData = {
   price: number;
   category: string;
   description: string;
-  image?: string | File;
+  image: string;
   _id?: string;
 };
 
@@ -36,7 +36,7 @@ const BookForm: React.FC<BookFormProps> = ({ mode, book, setEditMode }) => {
   const defaultCategoryName =
     mode === "add"
       ? categories.length > 0
-        ? categories?.[0]?.name
+        ? categories[0].name
         : ""
       : book.category;
   const initialValues: BookData = {
@@ -44,7 +44,7 @@ const BookForm: React.FC<BookFormProps> = ({ mode, book, setEditMode }) => {
     price: mode === "add" ? 100 : book?.price,
     category: defaultCategoryName,
     description: mode === "add" ? "" : book?.description,
-    // image: mode === "add" ? "" : book?.image,
+    image: mode === "add" ? "" : book?.image,
   };
 
   useEffect(()=>{
@@ -86,7 +86,7 @@ const BookForm: React.FC<BookFormProps> = ({ mode, book, setEditMode }) => {
 
       for (const key in values) {
         if (Object.prototype.hasOwnProperty.call(values, key)) {
-          const valueKey = key as keyof BookData;
+          const valueKey = key as keyof BookData; 
           formData.append(valueKey, String(values[valueKey]) || String(initialValues[valueKey]));
         }
       }
@@ -97,23 +97,44 @@ const BookForm: React.FC<BookFormProps> = ({ mode, book, setEditMode }) => {
         (category) => category.name === findCategory
       )[0]?._id;
  
-
+      formData.append("categoryId", categoryId);  
+        let finalValues = {...values, categoryId: categoryId};
       if(show && file){
-        formData.append("image", file);
+
+        
+        const convertToBase64 = (file: any) =>{
+          return new Promise((resolve, reject)=>{
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            
+            reader.onload = () =>{
+              resolve(reader.result);
+            }
+            
+            reader.onerror = (error) =>{
+              reject(error)
+            }
+          })
+        }
+        const base64  = await convertToBase64(file);
+        if(base64){
+          finalValues ={ ...finalValues, image: String(base64)}
+
+        }
+        formData.append("image", String(base64));
       }
       else{
         formData.append("image", String(book.image))
       }
 
 
-      formData.append("categoryId", categoryId); 
 
       if (mode === "add") {
-        const result = addBook &&  addBook(formData);
+        const result = addBook &&  addBook(finalValues);
         if(result){
           setFileName("No Choosen Image");
-        setFile(null);
-        resetForm();
+          setFile(null);
+          resetForm();
         }
         else {
           toast.error("Something went wrong...")
@@ -121,14 +142,14 @@ const BookForm: React.FC<BookFormProps> = ({ mode, book, setEditMode }) => {
         }
       }
       else{
-        book._id && ( updateBook && updateBook( book._id, formData))
+        book._id && ( updateBook && updateBook( book._id, finalValues))
        
        setEditMode &&  setEditMode(false);
       }
        
     },
     validationSchema,
-  });
+  });   
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -216,7 +237,7 @@ const BookForm: React.FC<BookFormProps> = ({ mode, book, setEditMode }) => {
               </button>
               <div className={styles.rowHalf}>
                 <img
-                  src={`${import.meta.env.VITE_BASE_URL}/${book?.image}`}
+                  src={book.image}
                   alt=""
                   width={100}
                   height={100}

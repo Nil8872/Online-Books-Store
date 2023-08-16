@@ -126,3 +126,16 @@ body{
 .error{
   color:var(--red);
 }
+
+.loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.3);  /* white background with 80% opacity */
+  z-index: 1000;  /* to make sure it overlays all other content */
+}

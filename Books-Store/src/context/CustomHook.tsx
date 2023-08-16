@@ -3,6 +3,7 @@ import {useContext} from "react";
 import { CategoryContext } from "./CategoryContext";
 import BookContext from "./BookContext";
 import CartContext from "./CartContext";
+import GlobalLodingContext, { GlobalLodingContextType } from "./GlobalLoadingContext";
 
 
 export type BookData = {
@@ -65,11 +66,18 @@ type CartContextType = {
     deleteCart : (cardId: string) => void;
 }
 
+export const useLoading = (): GlobalLodingContextType =>{
+  const context = useContext(GlobalLodingContext);
+  if(!context) {
+    throw new Error("useLoading must be used within a GlobalLoading Provider")
+  }
+  return context;
+}
  
 export const useCategory = () : CategroryContextType =>{
     const context = useContext(CategoryContext);
     if(!context){
-        throw new Error("useBooks must be used within a CategoryContext")
+        throw new Error("useBooks must be used within a Category Provider")
     }
     return context;
 }
